@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GhoostlingData {
 
-    public const float RATE = 10f;  // Hz, should ideally be greater than 1
+    public const float RATE = 30f;  // Hz, should ideally be greater than 1
     public static int count = 0;
     public int id;
     public List<Frame> frames = new List<Frame>();
@@ -32,46 +32,34 @@ public class GhoostlingData {
         public Frame next;
         public Frame Interpolate(float time) {
             float t = (time - prev.time) / (next.time - prev.time);
-            Debug.Log(
-                "time = " + time +
-                " next = " + next.time +
-                " prev = " + prev.time +
-                " t = " + t
-                );
             Frame h = new Frame();
             h.time = time;
             h.position = Vector3.Lerp(prev.position , next.position , t);
-            h.eulerAngles = Vector3.Lerp(prev.eulerAngles , next.eulerAngles , t);
+
+            // lerping euler angles is a bit more complicated
+            Quaternion q_prev = Quaternion.Euler(prev.eulerAngles);
+            Quaternion q_next = Quaternion.Euler(next.eulerAngles);
+            Quaternion q_h = Quaternion.Lerp(q_prev, q_next, t);
+            h.eulerAngles = q_h.eulerAngles;
             return h;
         }
     }
 
     public Frame GetFrame(float timeAlive) {
-        int idx_full_sec = frameIdxAtSecond[Mathf.FloorToInt(timeAlive)];
 
         if (timeAlive > lastFrameTime) {
             timeAlive = lastFrameTime;
         }
 
+        int idx_full_sec = frameIdxAtSecond[Mathf.FloorToInt(timeAlive)];
+
         int idx_prev = idx_full_sec;
-        while(frames[idx_prev + 1].time < timeAlive) {
+        while(idx_prev < frames.Count && frames[idx_prev + 1].time < timeAlive) {
             ++idx_prev;
         }
-
-        Debug.Log("Frame lookup.  Time alive:" + timeAlive + " idx:" + idx_prev);
-
-
-        // TODO this check is probably redundant
-       /* if (idx_prev >= frames.Count) {
-            // will return last two frames
-            idx_prev = frames.Count - 2;
-        } */
-
         FramePair p = new FramePair();
         p.prev = frames[idx_prev];
         p.next = frames[idx_prev+1];
-
-        Debug.Log("prev:" + p.prev.time + ", next:" + p.next.time);
 
         return p.Interpolate(timeAlive);
     }
