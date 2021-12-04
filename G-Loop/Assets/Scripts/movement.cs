@@ -16,7 +16,6 @@ public class movement : MonoBehaviour
     private bool isGrounded;
     
 
-    // Update is called once per frame
     void Update() {
         isGrounded = IsGrounded();
         float x = Input.GetAxis("Horizontal");
@@ -33,7 +32,7 @@ public class movement : MonoBehaviour
             velocity.y = Mathf.Sqrt(JUMP_HEIGHT * 2f * -GRAVITY);
         }
         
-        velocity.y += 0.5f * GRAVITY * Time.deltaTime;
+        velocity.y += GRAVITY * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
