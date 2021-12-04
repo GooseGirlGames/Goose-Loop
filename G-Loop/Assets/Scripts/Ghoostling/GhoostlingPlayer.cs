@@ -21,6 +21,10 @@ public class GhoostlingPlayer : MonoBehaviour {
         PlayGhoostlingFrame();
     }
 
+    public void SetData(GhoostlingData d) {
+        data = d;
+    }
+
     // called once, as soon as data is available
     private void InitializeGhoostling() {
         // show model, enable interactions etc.
@@ -28,9 +32,9 @@ public class GhoostlingPlayer : MonoBehaviour {
     private void PlayGhoostlingFrame() {
         timeAlive += Time.deltaTime;
 
-        GhoostlingData.FramePair p = data.GetClosestFrames(timeAlive);
+        GhoostlingData.Frame h = data.GetFrame(timeAlive);
 
-        GhoostlingData.Frame h = p.prev;  // TODO interpolate
+        //Debug.Log("Time Alive: " + timeAlive + "; playing Frame at " + h.time);
 
         transform.position = h.position;
         transform.eulerAngles = h.eulerAngles;

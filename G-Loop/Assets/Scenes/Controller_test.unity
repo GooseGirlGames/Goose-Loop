@@ -361,6 +361,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
+--- !u!1 &600071628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600071629}
+  m_Layer: 0
+  m_Name: GhoostlingMom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &600071629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600071628}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.18, y: 7.98, z: 1.78}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &745803178
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +657,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 177.05
       objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: ghoostlingHolder
+      value: 
+      objectReference: {fileID: 600071629}
     - target: {fileID: 6349239089560444314, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
       propertyPath: m_RootOrder
       value: 4
