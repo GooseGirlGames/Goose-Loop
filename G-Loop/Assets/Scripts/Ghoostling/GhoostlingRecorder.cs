@@ -14,6 +14,7 @@ public class GhoostlingRecorder : MonoBehaviour {
     private bool recording = true;
     private List<GhoostlingAction> actions = new List<GhoostlingAction>();
     public mouse_look cam;
+    public GameObject viewModel;
     void Awake() {
     }
 
@@ -75,6 +76,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         GetComponent<movement>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Default");
+        viewModel.SetActive(false);
 
         foreach (var action in resetEvents){
             action.Invoke();
@@ -103,7 +105,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponent<movement>().enabled = true;
         g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Player");
-
+        g.GetComponent<GhoostlingRecorder>().viewModel.SetActive(true);
         foreach (GhoostlingPlayer p in
                 ghoostlingHolder.GetComponentsInChildren<GhoostlingPlayer>()) {
             p.Restart();
