@@ -66,6 +66,7 @@ public class GhoostlingRecorder : MonoBehaviour {
     private void SpawnGhoostling() {
         gameObject.name += " (Recording)";
 
+        GetComponentInChildren<CapsuleCollider>().enabled = true;
         GetComponent<GhoostlingRecorder>().enabled = false;
         GetComponentInChildren<Camera>().enabled = false;
         GetComponentInChildren<AudioListener>().enabled = false;
@@ -93,6 +94,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.name = "Ghoostling #" + g.GetComponentInChildren<GhoostlingRecorder>().GetDataId();
         g.GetComponentInChildren<GhoostlingRecorder>().ghoostlingHolder = ghoostlingHolder;
 
+        g.GetComponentInChildren<CapsuleCollider>().enabled = false;
         g.GetComponent<GhoostlingRecorder>().enabled = true;
         g.GetComponentInChildren<Camera>().enabled = true;
         g.GetComponentInChildren<AudioListener>().enabled = true;
