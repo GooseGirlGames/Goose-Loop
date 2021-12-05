@@ -11,6 +11,8 @@ public class GhoostlingData {
     public List<Frame> frames = new List<Frame>();
     public List<int> frameIdxAtSecond = new List<int>();
     private float lastFrameTime;
+
+    private int last_prev_idx;
     public GhoostlingData() {
         GhoostlingData.count += 1;
     }
@@ -26,6 +28,7 @@ public class GhoostlingData {
         public float time;
         public Vector3 position;
         public Vector3 eulerAngles;
+        public List<GhoostlingAction> actions;
     }
     public class FramePair {
         public Frame prev;
@@ -41,6 +44,7 @@ public class GhoostlingData {
             Quaternion q_next = Quaternion.Euler(next.eulerAngles);
             Quaternion q_h = Quaternion.Lerp(q_prev, q_next, t);
             h.eulerAngles = q_h.eulerAngles;
+
             return h;
         }
     }
@@ -61,6 +65,15 @@ public class GhoostlingData {
         p.prev = frames[idx_prev];
         p.next = frames[idx_prev+1];
 
-        return p.Interpolate(timeAlive);
+        Frame interpolated = p.Interpolate(timeAlive);
+
+        // if this is the first time we're dealing with the `prev` frame,
+        // execute all its actions
+        if (last_prev_idx != idx_prev) {
+            interpolated.actions = frames[idx_prev].actions;
+        }
+
+        last_prev_idx = idx_prev;
+        return interpolated;
     }
 }

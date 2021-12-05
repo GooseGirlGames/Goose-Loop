@@ -5,12 +5,19 @@ using UnityEngine;
 public class GhoostlingRecorder : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform ghoostlingHolder;
+    public GhoostlingActionManager actionMan;
     private float timeAlive = 0;
     private float timeSinceLastCapture = 0;
     private GhoostlingData data = new GhoostlingData();
     private bool recording = true;
+    private List<GhoostlingAction> actions = new List<GhoostlingAction>();
     void Awake() {
         
+    }
+
+    public void ExecuteAndRecordAction(GhoostlingAction a) {
+        a.Trigger(actionMan);
+        actions.Add(a);
     }
 
     void Update() {
@@ -21,7 +28,6 @@ public class GhoostlingRecorder : MonoBehaviour {
 
         if (timeSinceLastCapture >= 1f/GhoostlingData.RATE) {
             data.AddFrame(CurrentFrame());
-            Debug.Log("Recorded goose frame");
             timeSinceLastCapture = 0;
         }
 
@@ -29,6 +35,7 @@ public class GhoostlingRecorder : MonoBehaviour {
             StopRecording();
             SpawnGhoostling();
         }
+
     }
 
     private GhoostlingData.Frame CurrentFrame() {
@@ -36,11 +43,19 @@ public class GhoostlingRecorder : MonoBehaviour {
         f.time = timeAlive;
         f.position = transform.position;
         f.eulerAngles = transform.eulerAngles;
+        if (actions.Count > 0) {
+            f.actions = new List<GhoostlingAction>();
+            f.actions.AddRange(actions);
+            actions.Clear();
+        }
         return f;
     }
 
     private void StopRecording() {
         recording = false;
+    }
+    public bool IsRecording() {
+        return recording;
     }
     private void SpawnGhoostling() {
         GameObject g = GameObject.Instantiate(playerPrefab, ghoostlingHolder);
@@ -51,7 +66,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponentInChildren<mouse_look>().enabled = false;
         g.GetComponent<movement>().enabled = false;
         g.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer("Default");
-        
+
         g.GetComponent<GhoostlingPlayer>().enabled = true;
         g.GetComponent<GhoostlingPlayer>().SetData(data);
     }

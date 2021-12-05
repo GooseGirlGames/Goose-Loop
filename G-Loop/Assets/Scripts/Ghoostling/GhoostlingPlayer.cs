@@ -6,6 +6,8 @@ public class GhoostlingPlayer : MonoBehaviour {
     private GhoostlingData data = null;
     private bool active = false;
     private float timeAlive = 0;
+
+    public GhoostlingActionManager actionMan;
     // Start is called before the first frame update
     void Start() {
         // hide model, disable interactions, etc.
@@ -38,5 +40,11 @@ public class GhoostlingPlayer : MonoBehaviour {
 
         transform.position = h.position;
         transform.eulerAngles = h.eulerAngles;
+
+        if (h.actions != null) {
+            foreach (GhoostlingAction action in h.actions) {
+                action.Trigger(actionMan);
+            }
+        }
     }
 }
