@@ -5,6 +5,7 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     public const float SPEED = 12f;
+    private float speedFactor = 1f;
     public const float GRAVITY = -30f;
     public const float GROUND_CHECK_RADIUS = 0.5f;
     public const float JUMP_HEIGHT = 2f;
@@ -19,6 +20,10 @@ public class movement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
+    public Animator anim;
+    public GhoostlingRecorder rec;
+    public GhoostlingAction crouchAction;
+    public GhoostlingAction uncrouchAction;
     
     private static float Snap(float d) {
         return Mathf.Sign(d) * Mathf.Pow(Mathf.Abs(d), MOVEMENT_SNAPINESS);
@@ -34,7 +39,7 @@ public class movement : MonoBehaviour
         }
 
         Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * SPEED * Time.deltaTime);
+        controller.Move(move * SPEED * speedFactor * Time.deltaTime);
 
         if (isGrounded && Input.GetButtonDown("Jump")) {
             velocity.y = Mathf.Sqrt(JUMP_HEIGHT * 2f * -GRAVITY);
@@ -42,9 +47,20 @@ public class movement : MonoBehaviour
         
         velocity.y += GRAVITY * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        if (Input.GetButtonDown("Crouch")) {
+            rec.ExecuteAndRecordAction(crouchAction);
+        } else if (Input.GetButtonUp("Crouch")) {
+            rec.ExecuteAndRecordAction(uncrouchAction);
+        }
     }
 
     bool IsGrounded() {
         return Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundLayer);
+    }
+
+    public void Crouch(bool crouch = true) {
+        anim.SetBool("Crouch", crouch);
+        speedFactor = crouch ? 0.5f : 1f;
     }
 }

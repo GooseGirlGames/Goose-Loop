@@ -2,7 +2,13 @@ fileFormatVersion: 2
 guid: fcb5106c8a065ffde9d593f652b50733
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 2667949614841947897
+    second: Walk
+  - first:
+      74: -7620525796249749518
+    second: Duck
   externalObjects: {}
   materials:
     materialImportMode: 2

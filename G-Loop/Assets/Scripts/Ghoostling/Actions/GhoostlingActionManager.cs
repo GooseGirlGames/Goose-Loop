@@ -6,6 +6,7 @@ public class GhoostlingActionManager : MonoBehaviour {
     public AudioSource audioSource;
     public GhoostlingRecorder rec;
     public PlaySound honk;
+    public movement movement;
 
     private void Update() {
         if (!rec.IsRecording()) return;
