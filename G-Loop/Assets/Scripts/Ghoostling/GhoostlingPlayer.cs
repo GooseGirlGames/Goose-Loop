@@ -9,6 +9,7 @@ public class GhoostlingPlayer : MonoBehaviour {
     private SkinnedMeshRenderer mesh;
     private Vector3 initialScale;
     public const float FADE_IN_TIME = 4.0f;
+    public mouse_look cam;
 
     public GhoostlingActionManager actionMan;
     // Start is called before the first frame update
@@ -51,6 +52,7 @@ public class GhoostlingPlayer : MonoBehaviour {
 
         transform.position = h.position;
         transform.eulerAngles = h.eulerAngles;
+        cam.xRotation = h.cameraPitch;
 
         if (h.actions != null) {
             foreach (GhoostlingAction action in h.actions) {

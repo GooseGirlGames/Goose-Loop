@@ -29,6 +29,7 @@ public class GhoostlingData {
         public float time;
         public Vector3 position;
         public Vector3 eulerAngles;
+        public float cameraPitch;
         public List<GhoostlingAction> actions;
     }
     public class FramePair {
@@ -45,6 +46,8 @@ public class GhoostlingData {
             Quaternion q_next = Quaternion.Euler(next.eulerAngles);
             Quaternion q_h = Quaternion.Lerp(q_prev, q_next, t);
             h.eulerAngles = q_h.eulerAngles;
+
+            h.cameraPitch = Mathf.Lerp(prev.cameraPitch, next.cameraPitch, t);
 
             return h;
         }

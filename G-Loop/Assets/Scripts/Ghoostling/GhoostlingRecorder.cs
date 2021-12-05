@@ -13,8 +13,8 @@ public class GhoostlingRecorder : MonoBehaviour {
     private GhoostlingData data = new GhoostlingData();
     private bool recording = true;
     private List<GhoostlingAction> actions = new List<GhoostlingAction>();
+    public mouse_look cam;
     void Awake() {
-        
     }
 
     public void ExecuteAndRecordAction(GhoostlingAction a) {
@@ -45,6 +45,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         f.time = timeAlive;
         f.position = transform.position;
         f.eulerAngles = transform.eulerAngles;
+        f.cameraPitch = cam.xRotation;
         if (actions.Count > 0) {
             f.actions = new List<GhoostlingAction>();
             f.actions.AddRange(actions);
@@ -69,7 +70,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         GetComponentInChildren<Camera>().enabled = false;
         GetComponentInChildren<AudioListener>().enabled = false;
         GetComponent<CharacterController>().enabled = false;
-        GetComponentInChildren<mouse_look>().enabled = false;
+        GetComponentInChildren<mouse_look>().acceptInput = false;
         GetComponent<movement>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Default");
@@ -96,7 +97,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponentInChildren<Camera>().enabled = true;
         g.GetComponentInChildren<AudioListener>().enabled = true;
         g.GetComponent<CharacterController>().enabled = true;
-        g.GetComponentInChildren<mouse_look>().enabled = true;
+        g.GetComponentInChildren<mouse_look>().acceptInput = true;
         g.GetComponent<movement>().enabled = true;
         g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Player");
