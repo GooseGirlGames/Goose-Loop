@@ -454,6 +454,42 @@ PrefabInstance:
       propertyPath: ghoostlingHolder
       value: 
       objectReference: {fileID: 435426097}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 37898371}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148273697556285585, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
+      propertyPath: resetEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6349239089560444314, guid: e2ccd4665b36d51c7b20956335986a15, type: 3}
       propertyPath: m_RootOrder
       value: 0
