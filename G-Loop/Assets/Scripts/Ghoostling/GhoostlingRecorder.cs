@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GhoostlingRecorder : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform ghoostlingHolder;
     public GhoostlingActionManager actionMan;
+    public List<UnityEvent> resetEvents;
     private float timeAlive = 0;
     private float timeSinceLastCapture = 0;
     private GhoostlingData data = new GhoostlingData();
@@ -71,6 +73,10 @@ public class GhoostlingRecorder : MonoBehaviour {
         GetComponent<movement>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Default");
+
+        foreach (var action in resetEvents){
+            action.Invoke();
+        }
 
         foreach (GhoostlingPlayer p in
                 ghoostlingHolder.GetComponentsInChildren<GhoostlingPlayer>()) {
