@@ -14,6 +14,7 @@ public class GhoostlingData {
 
     private int last_prev_idx;
     public GhoostlingData() {
+        id = GhoostlingData.count;
         GhoostlingData.count += 1;
     }
     public void AddFrame(Frame f) {

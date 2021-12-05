@@ -57,17 +57,31 @@ public class GhoostlingRecorder : MonoBehaviour {
     public bool IsRecording() {
         return recording;
     }
+    public int GetDataId() {
+        return data.id;
+    }
     private void SpawnGhoostling() {
         GameObject g = GameObject.Instantiate(playerPrefab, ghoostlingHolder);
-        g.GetComponent<GhoostlingRecorder>().enabled = false;
-        g.GetComponentInChildren<Camera>().enabled = false;
-        g.GetComponentInChildren<AudioListener>().enabled = false;
-        g.GetComponent<CharacterController>().enabled = false;
-        g.GetComponentInChildren<mouse_look>().enabled = false;
-        g.GetComponent<movement>().enabled = false;
-        g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer = LayerMask.NameToLayer("Default");
+        g.transform.position = ghoostlingHolder.position;
+        g.transform.eulerAngles = ghoostlingHolder.eulerAngles;
 
-        g.GetComponent<GhoostlingPlayer>().enabled = true;
-        g.GetComponent<GhoostlingPlayer>().SetData(data);
+        g.name = "Ghoostling #" + g.GetComponentInChildren<GhoostlingRecorder>().GetDataId();
+        g.GetComponentInChildren<GhoostlingRecorder>().ghoostlingHolder = ghoostlingHolder;
+
+        gameObject.name += " (Recording)";
+
+        GetComponent<GhoostlingRecorder>().enabled = false;
+        GetComponentInChildren<Camera>().enabled = false;
+        GetComponentInChildren<AudioListener>().enabled = false;
+        GetComponent<CharacterController>().enabled = false;
+        GetComponentInChildren<mouse_look>().enabled = false;
+        GetComponent<movement>().enabled = false;
+        GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer = LayerMask.NameToLayer("Default");
+
+        foreach (GhoostlingPlayer p in ghoostlingHolder.GetComponentsInChildren<GhoostlingPlayer>()) {
+            p.Restart();
+        }
+        GetComponent<GhoostlingPlayer>().enabled = true;
+        GetComponent<GhoostlingPlayer>().SetData(data);
     }
 }

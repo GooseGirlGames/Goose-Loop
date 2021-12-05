@@ -6,11 +6,15 @@ public class GhoostlingPlayer : MonoBehaviour {
     private GhoostlingData data = null;
     private bool active = false;
     private float timeAlive = 0;
+    private SkinnedMeshRenderer mesh;
+    private Vector3 initialScale;
+    public const float FADE_IN_TIME = 4.0f;
 
     public GhoostlingActionManager actionMan;
     // Start is called before the first frame update
-    void Start() {
-        // hide model, disable interactions, etc.
+    void Awake() {
+        mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+        initialScale = transform.localScale;
     }
 
     void Update() {
@@ -26,6 +30,9 @@ public class GhoostlingPlayer : MonoBehaviour {
     public void SetData(GhoostlingData d) {
         data = d;
     }
+    public void Restart() {
+        timeAlive = 0;
+    }
 
     // called once, as soon as data is available
     private void InitializeGhoostling() {
@@ -33,6 +40,10 @@ public class GhoostlingPlayer : MonoBehaviour {
     }
     private void PlayGhoostlingFrame() {
         timeAlive += Time.deltaTime;
+
+        if (timeAlive <= FADE_IN_TIME) {
+            transform.localScale = initialScale * (timeAlive / FADE_IN_TIME);
+        }
 
         GhoostlingData.Frame h = data.GetFrame(timeAlive);
 
