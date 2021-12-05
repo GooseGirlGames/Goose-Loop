@@ -65,7 +65,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponent<CharacterController>().enabled = false;
         g.GetComponentInChildren<mouse_look>().enabled = false;
         g.GetComponent<movement>().enabled = false;
-        g.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer("Default");
+        g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer = LayerMask.NameToLayer("Default");
 
         g.GetComponent<GhoostlingPlayer>().enabled = true;
         g.GetComponent<GhoostlingPlayer>().SetData(data);
