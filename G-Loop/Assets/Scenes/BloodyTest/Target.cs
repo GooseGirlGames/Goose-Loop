@@ -5,18 +5,18 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
 
-    public ParticleSystem blood;
+    public GameObject blood;
     // Start is called before the first frame update
     void Start()
     {
-        blood.Stop();
+
     }
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == "Target"){
-            blood.transform.position = other.transform.position;
-            blood.Play();
+    private void OnCollisionEnter(Collision other) {
+        if(other.collider.tag == "Target"){
+            GameObject splat = Instantiate(blood, other.gameObject.transform.position, Quaternion.identity) as GameObject;
+            blood.GetComponent<ParticleSystem>().Play();
         }
-        blood.Stop();
+        //blood.Stop();
     }
     // Update is called once per frame
     void Update()
