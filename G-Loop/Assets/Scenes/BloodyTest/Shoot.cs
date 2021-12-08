@@ -11,8 +11,9 @@ public class Shoot : MonoBehaviour
     public GameObject bullet1;
     public GameObject bullet2;
     public GameObject bullet3;
-
     private GameObject[] bullet_image;
+
+
     public int bullets;
     private int bullet_count = 1;
     private bool reload = false;
@@ -40,10 +41,10 @@ public class Shoot : MonoBehaviour
     }
 
     void Update()
-    { 
+    {
         if(Input.GetButtonDown("Fire1") && !reload){
             GameObject bullet = Instantiate(gun, spawn.transform.position, Quaternion.identity) as GameObject;
-            bullet.GetComponent<Rigidbody>().AddForce(transform.forward *1000);
+            bullet.GetComponent<Rigidbody>().AddForce(transform.forward *500);
             gun.SetActive(true);
             bullet_image[bullet_count-1].SetActive(false);
             bullet_count++; 
