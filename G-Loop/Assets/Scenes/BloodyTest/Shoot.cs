@@ -6,6 +6,8 @@ public class Shoot : MonoBehaviour
 {
     public GameObject gun;
     public GameObject spawn;
+    public GameObject reload_warning;
+
     public int bullets;
     private int bullet_count = 1;
     private bool reload = false;
@@ -14,9 +16,13 @@ public class Shoot : MonoBehaviour
     void Start(){
         
     }
+
     IEnumerator Reload(){
             reload = true;
+            yield return new WaitForSeconds(0.5f);
+            reload_warning.SetActive(true);
             yield return new WaitForSeconds(5);
+            reload_warning.SetActive(false);
             reload = false;
             bullet_count = 1; 
     }
