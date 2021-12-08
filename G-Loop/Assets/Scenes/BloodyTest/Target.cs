@@ -13,6 +13,7 @@ public class Target : MonoBehaviour
 
     }
     private void OnCollisionEnter(Collision other) {
+        gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         if(other.collider.tag == "Target" || other.collider.tag == "Duck"){
             
             if(other.collider.tag == "Duck"){
