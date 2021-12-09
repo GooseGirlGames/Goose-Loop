@@ -42,6 +42,9 @@ public class GooseController : MonoBehaviour {
 
     void Awake(){
         id = GooseController.count++;
+
+        InitDebugMenuLines();
+
         data = new GhoostlingData();
         behaviours = new Dictionary<GooseState, List<Behaviour>> {
             {GooseState.ACTIVE, BehavioursWhileActive},
@@ -83,6 +86,10 @@ public class GooseController : MonoBehaviour {
         }
     }
 
+    private void OnGUI() {
+        UpdateDebugMenuText();
+    }
+
     /** Fixed update for active player:  Execute actions and store frame. */
     private void FixedUpdateActive() {
 
@@ -122,7 +129,7 @@ public class GooseController : MonoBehaviour {
         // Perform movement
         var currentFrame = data.GetFrame(tick);
         Movement.ProcessInputs(currentFrame.inputs);
-        // TODO check if movement is broken
+        // check for broken movement in CheckForLoopBreak
 
         // Restore rotations
         transform.rotation = Quaternion.Euler(currentFrame.eulerAngles);
@@ -130,6 +137,30 @@ public class GooseController : MonoBehaviour {
         // TODO handle shots
         // TODO handle item interactions
         // TODO handle non-break zones
+
+
+        // setup members for drawing debug gizmos
+        _actual_pos = transform.position;
+        _recorded_pos = currentFrame.position;
+    }
+
+    public bool CheckForLoopBreak() {
+
+        int tick = gman.GetCurrentTick();  // may or may not need +1
+        var frame = data.GetFrame(tick);
+        var deltaPosition = transform.position - frame.position;
+
+        if (frame.nonBreakZone.HasValue) {
+            if (frame.nonBreakZone.Value.ignoreAxisY) {
+                deltaPosition.y = 0;
+            }
+        }
+
+        float error = deltaPosition.magnitude;
+
+        _error = error;  // this member variable is only used for debug output
+
+        return error < 0.5f;
     }
 
     public void ResetTransformToSpawn() {
@@ -173,4 +204,27 @@ public class GooseController : MonoBehaviour {
         return state;
     }
 
+    // On Screen Debug stuff
+    private int _debug_line;
+    private float _error;
+    private Vector3 _actual_pos;
+    private Vector3 _recorded_pos;
+    private void InitDebugMenuLines() {
+        var debug = DebugMenu.GetInstance();
+        _debug_line = debug.RegisterLine();
+    }
+    private void UpdateDebugMenuText() {
+        var debug = DebugMenu.GetInstance();
+        string errorString = _error.ToString("F5");
+        if (state != GooseState.GHOOSTLING) {
+            errorString = "N/A";
+        }
+        debug.UpdateLine(_debug_line, "G" + GetId() + " breakError: " + errorString);
+    }
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(_actual_pos, 1f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(_recorded_pos, 1f);
+    }
 }

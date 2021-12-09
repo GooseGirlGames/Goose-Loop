@@ -50,6 +50,12 @@ public class GhoostlingManager : MonoBehaviour {
 
         foreach (var controller in geese) {
             controller.Goose_FixedUpdate();
+            if (controller.GetState() == GooseController.GooseState.GHOOSTLING) {
+                bool broken = controller.CheckForLoopBreak();
+                if (broken) {
+                    Debug.Log("Loop broken!");
+                }
+            }
         }
         
         if (Input.GetKeyDown(KeyCode.G)) {
