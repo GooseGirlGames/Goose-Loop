@@ -8,20 +8,17 @@ public class mouse_look : MonoBehaviour
     public float mouseSensitivity = 160f;
     public Transform playerBody;
     public float xRotation = 0f;
-    public bool acceptInput = true;
+    public GooseController controller;
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-        if (acceptInput) {
+    void Update() {
+        if (controller.GetState() == GooseController.GooseState.ACTIVE) {
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
             xRotation -= mouseY;
             playerBody.Rotate(Vector3.up * mouseX);
         }

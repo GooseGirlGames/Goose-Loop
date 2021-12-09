@@ -18,6 +18,7 @@ public class GooseController : MonoBehaviour {
 
     /** References to commonly accessed behaviours. */
     public Movement Movement;
+    public mouse_look MouseLook;
 
     /** All behaviours that should be active in the state.  Upon state
      * change, behaviours contained in other states' lists (but not in the list for the new active
@@ -31,10 +32,13 @@ public class GooseController : MonoBehaviour {
     private Dictionary<GooseState, List<Behaviour>> behaviours;
 
     private GooseState state;
+    private GhoostlingData data;
+    private GhoostlingManager gman;
     public bool EnableDebugStateChangeKeys = false;
 
     void Awake(){
         id = GooseController.count++;
+        data = new GhoostlingData();
         GhoostlingManager.GetInstance().RegisterGoose(this);
         gameObject.name = GenerateName();
         behaviours = new Dictionary<GooseState, List<Behaviour>> {
@@ -42,6 +46,7 @@ public class GooseController : MonoBehaviour {
             {GooseState.GHOOSTLING, BehavioursWhileGhoostling},
             {GooseState.RAGDOLL, BehavioursWhileRagdoll},
         };
+        gman = GhoostlingManager.GetInstance();
     }
 
     private void Update() {
@@ -53,6 +58,77 @@ public class GooseController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Alpha3))
                 SetState(GooseState.RAGDOLL);
         }
+    }
+    private void FixedUpdate() {
+        switch(state) {
+            case (GooseState.ACTIVE):
+                FixedUpdateActive();
+                break;
+            case (GooseState.GHOOSTLING):
+                FixedUpdateGhoostling();
+                break;
+        }
+    }
+
+    /** Fixed update for active player:  Execute actions and store frame. */
+    private void FixedUpdateActive() {
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+            ResetTransformToSpawn();
+            SetState(GooseState.GHOOSTLING);
+            gman.SpawnActiveGoose();
+            return;
+        }
+
+        // create frame, store metadata
+        GhoostlingData.Frame currentFrame = new GhoostlingData.Frame();
+        currentFrame.tick = gman.GetCurrentTick();
+
+        // Collect inputs and act upon them
+        var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
+        currentFrame.inputs = inputs;
+        Movement.ProcessInput(inputs);
+
+        // Store positions, rotations etc.
+        currentFrame.position = transform.position;
+        currentFrame.eulerAngles = transform.rotation.eulerAngles;
+        currentFrame.cameraPitch = MouseLook.xRotation;
+
+        // TODO handle shots
+        currentFrame.shotFired = null;
+        // TODO handle item interactions
+        currentFrame.itemInteraction = null;
+        // TODO handle non-break zones
+        currentFrame.nonBreakZone = null;
+
+        // Store frame in recording
+        data.AddFrame(currentFrame);
+    }
+
+    /** Fixed update for ghoostling.  Play frame. */
+    private void FixedUpdateGhoostling() {
+        int tick = gman.GetCurrentTick();
+        if (tick > data.GetFrameCount()) {
+            Debug.LogWarning(GenerateName() + " ran out of ticks to replay.");
+            return;
+        }
+
+        // Perform movement
+        var currentFrame = data.GetFrame(tick);
+        Movement.ProcessInput(currentFrame.inputs);
+        // TODO check if movement is broken
+
+        // Restore rotations
+        transform.rotation = Quaternion.Euler(currentFrame.eulerAngles);
+        MouseLook.xRotation = currentFrame.cameraPitch;
+        // TODO handle shots
+        // TODO handle item interactions
+        // TODO handle non-break zones
+    }
+
+    public void ResetTransformToSpawn() {
+        transform.position = gman.transform.position;
+        transform.eulerAngles = gman.transform.eulerAngles;
     }
 
     public int GetId() {

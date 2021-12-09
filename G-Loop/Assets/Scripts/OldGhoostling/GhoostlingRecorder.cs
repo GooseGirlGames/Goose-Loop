@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+// DEPRECATED, TO BE REMOVED (FUNCTIONALITY REPLACED BY GooseController)
 public class GhoostlingRecorder : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform ghoostlingHolder;
@@ -38,7 +39,7 @@ public class GhoostlingRecorder : MonoBehaviour {
 
     private GhoostlingData.Frame CurrentFrame() {
         GhoostlingData.Frame f = new GhoostlingData.Frame();
-        f.time = timeAlive;
+        //f.time = timeAlive;
         f.position = transform.position;
         f.eulerAngles = transform.eulerAngles;
         f.cameraPitch = cam.xRotation;
@@ -63,7 +64,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         GetComponentInChildren<Camera>().enabled = false;
         GetComponentInChildren<AudioListener>().enabled = false;
         GetComponent<CharacterController>().enabled = false;
-        GetComponentInChildren<mouse_look>().acceptInput = false;
+        //GetComponentInChildren<mouse_look>().acceptInput = false;
         GetComponent<Movement>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Default");
@@ -92,7 +93,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponentInChildren<Camera>().enabled = true;
         g.GetComponentInChildren<AudioListener>().enabled = true;
         g.GetComponent<CharacterController>().enabled = true;
-        g.GetComponentInChildren<mouse_look>().acceptInput = true;
+        //g.GetComponentInChildren<mouse_look>().acceptInput = true;
         g.GetComponent<Movement>().enabled = true;
         g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Player");

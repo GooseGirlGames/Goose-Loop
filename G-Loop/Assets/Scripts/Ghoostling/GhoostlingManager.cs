@@ -6,6 +6,7 @@ using UnityEngine;
  * Exists once per Scene.  Transform position/rotation is Ghoosling spawn
  */
 public class GhoostlingManager : MonoBehaviour {
+    public GameObject playerPrefab;
     private List<GooseController> geese = new List<GooseController>();
     private int tick;
     
@@ -31,10 +32,34 @@ public class GhoostlingManager : MonoBehaviour {
         return managers[0];
     }
 
+    public int GetCurrentTick() {
+        return tick;
+    }
+
     private void FixedUpdate() {
         ++tick;
 
         UpdateDebugMenuText();
+    }
+
+    private void ResetTick() {
+        // TODO delay, UI stuff etc
+        tick = 0;
+    }
+
+    public void SpawnActiveGoose() {
+        // TODO remove this, duh
+        ResetTick();
+        return;
+        // end TODO
+
+        /*
+        GameObject newGoose = GameObject.Instantiate(playerPrefab, transform);
+        GooseController controller = newGoose.GetComponent<GooseController>();
+        controller.ResetTransformToSpawn();
+        controller.SetState(GooseController.GooseState.ACTIVE);
+        ResetTick();
+        */
     }
 
     // Debug stuff

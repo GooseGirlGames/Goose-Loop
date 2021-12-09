@@ -51,17 +51,14 @@ public class Movement : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        isGrounded = IsGrounded();
-
-        if (AcceptPlayerInput) {
-            var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
-            ProcessInput(inputs);
-            // TODO store inputs
-        }
+        // Inputs are managed by GooseController
     }
 
-    bool IsGrounded() {
-        return Physics.CheckSphere(groundCheck.position, GroundCheck.GROUND_CHECK_RADIUS, groundLayer);
+    public void PerformGroundCheck() {
+        isGrounded = Physics.CheckSphere(groundCheck.position,
+                GroundCheck.GROUND_CHECK_RADIUS,
+                groundLayer
+        );
     }
 
     public void Crouch(bool crouch = true) {

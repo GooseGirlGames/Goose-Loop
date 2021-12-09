@@ -51,21 +51,25 @@ public class GhoostlingData {
     }
     public struct Frame {
         public int tick;
-        public float time;
         public UserInputs inputs;
         public Vector3 position;
         public Vector3 eulerAngles;
         public float cameraPitch;
-        public ShotFired shotFired;
-        public ItemInteraction itemInteraction;
+        public ShotFired? shotFired;
+        public ItemInteraction? itemInteraction;
+        public NonBreakZone? nonBreakZone;
     }
-    public List<Frame> frames = new List<Frame>();
+    private List<Frame> frames = new List<Frame>();
 
     public void AddFrame(Frame f) {
         frames.Add(f);
     }
 
     public Frame GetFrame(int tick) {
-        return new Frame();
+        return frames[tick];
+    }
+
+    public int GetFrameCount() {
+        return frames.Count;
     }
 }

@@ -13,6 +13,8 @@ public class GooseID : MonoBehaviour {
 
 
     private void OnGUI() {
+        if (!Camera.main) return;
+        
         var lookTarget = Camera.main.transform.position;
         lookTarget.y = transform.position.y;
         text.gameObject.transform.LookAt(lookTarget);
