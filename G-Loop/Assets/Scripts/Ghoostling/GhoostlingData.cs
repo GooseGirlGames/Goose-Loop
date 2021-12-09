@@ -10,6 +10,8 @@ public class GhoostlingData {
     public struct UserInputs {
         public float horizontal;  // result of Input.GetAxis("Horizontal")
         public float vertical;  // result of Input.GetAxis("Vertical")
+        public float mouseX;
+        public float mouseY;
         public bool jumpButtonDown;
         public bool jumpButtonUp;
         public bool crouchButtonDown;
@@ -21,6 +23,8 @@ public class GhoostlingData {
                                        // Would recommend passing READ_USER_INPUTS for clarity :)
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
             jumpButtonDown = Input.GetButtonDown("Jump");
             jumpButtonUp = Input.GetButtonUp("Jump");
             crouchButtonDown = Input.GetButtonDown("Crouch");
@@ -54,7 +58,6 @@ public class GhoostlingData {
         public UserInputs inputs;
         public Vector3 position;
         public Vector3 eulerAngles;
-        public float cameraPitch;
         public ShotFired? shotFired;
         public ItemInteraction? itemInteraction;
         public NonBreakZone? nonBreakZone;

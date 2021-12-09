@@ -101,12 +101,12 @@ public class GooseController : MonoBehaviour {
         var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
         currentFrame.inputs = inputs;
         Movement.ProcessInputs(inputs);
+        MouseLook.ProcessInputs(inputs);
 
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
         currentFrame.eulerAngles = transform.rotation.eulerAngles;
-        currentFrame.cameraPitch = MouseLook.xRotation;
-
+        
         // TODO handle shots
         currentFrame.shotFired = null;
         // TODO handle item interactions
@@ -129,11 +129,10 @@ public class GooseController : MonoBehaviour {
         // Perform movement
         var currentFrame = data.GetFrame(tick);
         Movement.ProcessInputs(currentFrame.inputs);
-        // check for broken movement in CheckForLoopBreak
+        MouseLook.ProcessInputs(currentFrame.inputs);
 
-        // Restore rotations
-        transform.rotation = Quaternion.Euler(currentFrame.eulerAngles);
-        MouseLook.xRotation = currentFrame.cameraPitch;
+        // check for broken movement is done in CheckForLoopBreak
+
         // TODO handle shots
         // TODO handle item interactions
         // TODO handle non-break zones
