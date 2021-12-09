@@ -28,7 +28,6 @@ public class Movement : MonoBehaviour {
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit) {
-
         /*
         TODO:
             If the object that was hit is a goose and that goose's id is
@@ -41,17 +40,12 @@ public class Movement : MonoBehaviour {
         if (body == null || body.isKinematic){
             return;
         }
+
         //Debug.Log(hit.moveDirection);
         if (hit.moveDirection.y < -0.3){
             force = new Vector3(0f, 0.5f, 0f) * Movement.GRAVITY * weight;
-            Debug.Log("IN THE AIR:" + force);
-        }
-        else{
-            Debug.Log(hit.controller.velocity.magnitude);
-            Debug.Log(hit.normal);
-            Debug.Log(pushPower);
+        } else {
             force = hit.controller.velocity.magnitude * hit.normal * -1 * pushPower * 100;
-            Debug.Log("ON THE GROUND:" + force);
         }
         body.AddForceAtPosition(force, hit.point);
     }
