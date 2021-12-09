@@ -7,7 +7,6 @@ public class Movement : MonoBehaviour {
     public const float SPEED = 12f;
     private float speedFactor = 1f;
     public const float GRAVITY = -30f;
-    public const float GROUND_CHECK_RADIUS = 0.5f;
     public const float JUMP_HEIGHT = 2f;
 
     // 0  = instant accelleration (infinetely snappy)
@@ -62,7 +61,7 @@ public class Movement : MonoBehaviour {
     }
 
     bool IsGrounded() {
-        return Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundLayer);
+        return Physics.CheckSphere(groundCheck.position, GroundCheck.GROUND_CHECK_RADIUS, groundLayer);
     }
 
     public void Crouch(bool crouch = true) {
@@ -95,4 +94,5 @@ public class Movement : MonoBehaviour {
             // TODO uncrouch 
         }
     }
+
 }
