@@ -48,18 +48,11 @@ public class GhoostlingManager : MonoBehaviour {
     }
 
     public void SpawnActiveGoose() {
-        // TODO remove this, duh
-        ResetTick();
-        return;
-        // end TODO
-
-        /*
         GameObject newGoose = GameObject.Instantiate(playerPrefab, transform);
         GooseController controller = newGoose.GetComponent<GooseController>();
         controller.ResetTransformToSpawn();
         controller.SetState(GooseController.GooseState.ACTIVE);
         ResetTick();
-        */
     }
 
     // Debug stuff
