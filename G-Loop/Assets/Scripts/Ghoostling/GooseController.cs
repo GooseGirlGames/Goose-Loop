@@ -93,7 +93,7 @@ public class GooseController : MonoBehaviour {
         // Collect inputs and act upon them
         var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
         currentFrame.inputs = inputs;
-        Movement.ProcessInput(inputs);
+        Movement.ProcessInputs(inputs);
 
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
@@ -121,7 +121,7 @@ public class GooseController : MonoBehaviour {
 
         // Perform movement
         var currentFrame = data.GetFrame(tick);
-        Movement.ProcessInput(currentFrame.inputs);
+        Movement.ProcessInputs(currentFrame.inputs);
         // TODO check if movement is broken
 
         // Restore rotations

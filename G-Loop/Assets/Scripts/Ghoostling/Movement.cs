@@ -50,7 +50,7 @@ public class Movement : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        // Inputs are managed by GooseController
+        // Inputs are managed by GooseController, which invokes the ProcessInputs method
     }
 
     public void PerformGroundCheck() {
@@ -65,8 +65,9 @@ public class Movement : MonoBehaviour {
         speedFactor = crouch ? 0.5f : 1f;
     }
 
-    public void ProcessInput(GhoostlingData.UserInputs inputs) {
-        
+    public void ProcessInputs(GhoostlingData.UserInputs inputs) {
+        PerformGroundCheck();
+
         float x = Snap(inputs.horizontal);
         float z = Snap(inputs.vertical);
 
