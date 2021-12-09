@@ -641,6 +641,7 @@ MonoBehaviour:
   Movement: {fileID: 4045397612735749029}
   BehavioursWhileActive:
   - {fileID: 4045397612735749029}
+  - {fileID: 6349239089116009943}
   BehavioursWhileGhoostling:
   - {fileID: 4045397612735749029}
   BehavioursWhileRagdoll: []

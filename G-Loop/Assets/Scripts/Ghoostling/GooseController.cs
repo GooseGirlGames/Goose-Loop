@@ -23,19 +23,21 @@ public class GooseController : MonoBehaviour {
      * change, behaviours contained in other states' lists (but not in the list for the new active
      * state) will be disabled.
      */
-    public List<MonoBehaviour> BehavioursWhileActive = new List<MonoBehaviour>();
-    public List<MonoBehaviour> BehavioursWhileGhoostling = new List<MonoBehaviour>();
-    public List<MonoBehaviour> BehavioursWhileRagdoll = new List<MonoBehaviour>();
+    public List<Behaviour> BehavioursWhileActive = new List<Behaviour>();
+    public List<Behaviour> BehavioursWhileGhoostling = new List<Behaviour>();
+    public List<Behaviour> BehavioursWhileRagdoll = new List<Behaviour>();
 
     // Map state to list, for convinience
-    private Dictionary<GooseState, List<MonoBehaviour>> behaviours;
+    private Dictionary<GooseState, List<Behaviour>> behaviours;
 
     private GooseState state;
     public bool EnableDebugStateChangeKeys = false;
 
     void Awake(){
         id = GooseController.count++;
-        behaviours = new Dictionary<GooseState, List<MonoBehaviour>> {
+        GhoostlingManager.GetInstance().RegisterGoose(this);
+        gameObject.name = GenerateName();
+        behaviours = new Dictionary<GooseState, List<Behaviour>> {
             {GooseState.ACTIVE, BehavioursWhileActive},
             {GooseState.GHOOSTLING, BehavioursWhileGhoostling},
             {GooseState.RAGDOLL, BehavioursWhileRagdoll},
@@ -58,13 +60,13 @@ public class GooseController : MonoBehaviour {
     }
 
     public string GenerateName() {
-        return GetState().ToString() + " #" + GetId();
+        return "Goose #" + GetId() + " (" + GetState().ToString() + ")";
     }
 
     public void SetState(GooseState state) {
         this.state = state;
         var behaviours_for_state = behaviours[state];
-        foreach(KeyValuePair<GooseState, List<MonoBehaviour>> e in behaviours) {
+        foreach (KeyValuePair<GooseState, List<Behaviour>> e in behaviours) {
             if (state != e.Key) {
                 foreach(var behaviour in e.Value) {
                     if (!behaviours_for_state.Contains(behaviour)) {

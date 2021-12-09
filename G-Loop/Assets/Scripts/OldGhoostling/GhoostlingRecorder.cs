@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class GhoostlingRecorder : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform ghoostlingHolder;
-    public List<UnityEvent> resetEvents;
+    public List<UnityEvent> resetEvents;  // TODO move to ghoostlingmanager
     private float timeAlive = 0;
     private float timeSinceLastCapture = 0;
     private GhoostlingData data = new GhoostlingData();
