@@ -8,14 +8,14 @@ using UnityEngine;
 public class GhoostlingManager : MonoBehaviour {
     private List<GooseController> geese = new List<GooseController>();
     private int tick;
-
+    
     public void RegisterGoose(GooseController goose) {
         geese.Add(goose);
         Debug.Log("Registered " + goose.name + ".  Now managing " + geese.Count + " geese.");
     }
 
     void Start() {
-
+        InitDebugMenuLines();
     }
 
     // Get current scene's GhooslingManager
@@ -33,5 +33,18 @@ public class GhoostlingManager : MonoBehaviour {
 
     private void FixedUpdate() {
         ++tick;
+
+        UpdateDebugMenuText();
+    }
+
+    // Debug stuff
+    private int _debug_line_tick;
+    private void InitDebugMenuLines() {
+        var debug = DebugMenu.GetInstance();
+        _debug_line_tick = debug.RegisterLine();
+    }
+    private void UpdateDebugMenuText() {
+        var debug = DebugMenu.GetInstance();
+        debug.UpdateLine(_debug_line_tick, "tick: " + tick);
     }
 }
