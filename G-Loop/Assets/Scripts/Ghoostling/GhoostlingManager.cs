@@ -6,9 +6,13 @@ using UnityEngine;
  * Exists once per Scene.  Transform position/rotation is Ghoosling spawn
  */
 public class GhoostlingManager : MonoBehaviour {
+    public const float PAUSE_TIME = 3.0f;
+    private const float PAUSE_STEP_TIME = 0.05f;  // changes update rate of debug text while paused
     public GameObject playerPrefab;
     private List<GooseController> geese = new List<GooseController>();
     private int tick;
+    private bool paused = false;
+    private float pauseTimeRemaining;
     
     public void RegisterGoose(GooseController goose) {
         geese.Add(goose);
@@ -37,22 +41,53 @@ public class GhoostlingManager : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if (paused) {
+            UpdateDebugMenuText();
+            return;
+        }
+
         ++tick;
+
+        foreach (var controller in geese) {
+            controller.Goose_FixedUpdate();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.G)) {
+            SpawnActiveGoose();
+        }
+
 
         UpdateDebugMenuText();
     }
-
+    private IEnumerator UnpauseAfterDelay() {
+        while(pauseTimeRemaining > 0) {
+            yield return new WaitForSeconds(PAUSE_STEP_TIME);
+            pauseTimeRemaining -= PAUSE_STEP_TIME;
+        }
+        paused = false;
+    }
     private void ResetTick() {
-        // TODO delay, UI stuff etc
+        // TODO UI stuff for delay
+        paused = true;
         tick = 0;
+        pauseTimeRemaining = PAUSE_TIME;
+        StartCoroutine(UnpauseAfterDelay());
     }
 
     public void SpawnActiveGoose() {
+        Debug.Log("Spawning new Goose at t=" + tick);
+
+        GooseController activeGoose = geese[geese.Count - 1];
+        activeGoose.ResetTransformToSpawn();
+        activeGoose.SetState(GooseController.GooseState.GHOOSTLING);
+
+        ResetTick();
+
         GameObject newGoose = GameObject.Instantiate(playerPrefab, transform);
         GooseController controller = newGoose.GetComponent<GooseController>();
         controller.ResetTransformToSpawn();
         controller.SetState(GooseController.GooseState.ACTIVE);
-        ResetTick();
+        
     }
 
     // Debug stuff
@@ -63,6 +98,10 @@ public class GhoostlingManager : MonoBehaviour {
     }
     private void UpdateDebugMenuText() {
         var debug = DebugMenu.GetInstance();
-        debug.UpdateLine(_debug_line_tick, "tick: " + tick);
+        string pauseText = "";
+        if (paused) {
+            pauseText += "PAUSED for " + pauseTimeRemaining.ToString("F2") + "secs";
+        }
+        debug.UpdateLine(_debug_line_tick, "tick: " + tick + " " + pauseText);
     }
 }

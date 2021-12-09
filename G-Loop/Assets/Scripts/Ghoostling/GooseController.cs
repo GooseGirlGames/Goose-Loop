@@ -20,6 +20,10 @@ public class GooseController : MonoBehaviour {
     public Movement Movement;
     public mouse_look MouseLook;
 
+    // Sadly, renderers are not behaviours, so they can't be managed by the lists :(
+    public GameObject viewModel;
+    public MeshRenderer playerModelRenderer;
+
     /** All behaviours that should be active in the state.  Upon state
      * change, behaviours contained in other states' lists (but not in the list for the new active
      * state) will be disabled.
@@ -39,14 +43,19 @@ public class GooseController : MonoBehaviour {
     void Awake(){
         id = GooseController.count++;
         data = new GhoostlingData();
-        GhoostlingManager.GetInstance().RegisterGoose(this);
-        gameObject.name = GenerateName();
         behaviours = new Dictionary<GooseState, List<Behaviour>> {
             {GooseState.ACTIVE, BehavioursWhileActive},
             {GooseState.GHOOSTLING, BehavioursWhileGhoostling},
             {GooseState.RAGDOLL, BehavioursWhileRagdoll},
         };
         gman = GhoostlingManager.GetInstance();
+
+        if (gameObject.name != GenerateName()) {  // initial goose needs setup
+            SetState(GooseState.ACTIVE);
+        }
+        gameObject.name = GenerateName();
+
+        gman.RegisterGoose(this);
     }
 
     private void Update() {
@@ -60,6 +69,10 @@ public class GooseController : MonoBehaviour {
         }
     }
     private void FixedUpdate() {
+        // Updates are called by GhoostlingManager
+    }
+
+    public void Goose_FixedUpdate() {
         switch(state) {
             case (GooseState.ACTIVE):
                 FixedUpdateActive();
@@ -72,13 +85,6 @@ public class GooseController : MonoBehaviour {
 
     /** Fixed update for active player:  Execute actions and store frame. */
     private void FixedUpdateActive() {
-
-        if (Input.GetKeyDown(KeyCode.G)) {
-            ResetTransformToSpawn();
-            SetState(GooseState.GHOOSTLING);
-            gman.SpawnActiveGoose();
-            return;
-        }
 
         // create frame, store metadata
         GhoostlingData.Frame currentFrame = new GhoostlingData.Frame();
@@ -158,6 +164,9 @@ public class GooseController : MonoBehaviour {
         Movement.AcceptPlayerInput = (state == GooseState.ACTIVE);
 
         gameObject.name = GenerateName();
+
+        viewModel.SetActive(state == GooseState.ACTIVE);
+        playerModelRenderer.enabled = (state != GooseState.ACTIVE);
     }
 
     public GooseState GetState() {

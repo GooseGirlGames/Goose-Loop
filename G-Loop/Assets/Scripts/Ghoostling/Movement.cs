@@ -20,7 +20,6 @@ public class Movement : MonoBehaviour {
     private Vector3 velocity;
     private bool isGrounded;
     public Animator anim;
-    public GhoostlingRecorder rec;
     public float pushPower = 10f;
     public float weight = 1f;
     
