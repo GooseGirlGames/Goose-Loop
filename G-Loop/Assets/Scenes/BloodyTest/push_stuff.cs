@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class push_stuff : MonoBehaviour
 {
+
     private void OnCollisionEnter(Collision other) {
-        if(other.collider.tag == "Target" || other.collider.tag == "Duck"){
-            other.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward *1000);
-        }
+        
+        other.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward *1000);
+        Debug.Log("HIT");
         
     }
     // Update is called once per frame
     void Update()
     {
-        
     }
 }
