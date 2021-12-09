@@ -22,8 +22,6 @@ public class Movement : MonoBehaviour {
     private bool isGrounded;
     public Animator anim;
     public GhoostlingRecorder rec;
-    public GhoostlingAction crouchAction;
-    public GhoostlingAction uncrouchAction;
     public float pushPower = 10f;
     public float weight = 1f;
     
@@ -53,11 +51,13 @@ public class Movement : MonoBehaviour {
         body.AddForceAtPosition(force, hit.point);
     }
 
-    void Update() {
+    void FixedUpdate() {
         isGrounded = IsGrounded();
 
         if (AcceptPlayerInput) {
-            ProcessPlayerInput();
+            var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
+            ProcessInput(inputs);
+            // TODO store inputs
         }
     }
 
@@ -70,10 +70,10 @@ public class Movement : MonoBehaviour {
         speedFactor = crouch ? 0.5f : 1f;
     }
 
-    private void ProcessPlayerInput() {
-
-        float x = Snap(Input.GetAxis("Horizontal"));
-        float z = Snap(Input.GetAxis("Vertical"));
+    public void ProcessInput(GhoostlingData.UserInputs inputs) {
+        
+        float x = Snap(inputs.horizontal);
+        float z = Snap(inputs.vertical);
 
         if (isGrounded && velocity.y < 0) {
             velocity.y = -2f;
@@ -82,17 +82,17 @@ public class Movement : MonoBehaviour {
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * SPEED * speedFactor * Time.deltaTime);
 
-        if (isGrounded && Input.GetButtonDown("Jump")) {
+        if (isGrounded && inputs.jumpButtonDown) {
             velocity.y = Mathf.Sqrt(JUMP_HEIGHT * 2f * -GRAVITY);
         }
         
         velocity.y += GRAVITY * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        if (Input.GetButtonDown("Crouch")) {
-            rec.ExecuteAndRecordAction(crouchAction);
-        } else if (Input.GetButtonUp("Crouch")) {
-            rec.ExecuteAndRecordAction(uncrouchAction);
+        if (inputs.crouchButtonDown) {
+            // TODO crouch 
+        } else if (inputs.crouchButtonUp) {
+            // TODO uncrouch 
         }
     }
 }

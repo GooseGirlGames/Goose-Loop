@@ -6,21 +6,14 @@ using UnityEngine.Events;
 public class GhoostlingRecorder : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform ghoostlingHolder;
-    public GhoostlingActionManager actionMan;
     public List<UnityEvent> resetEvents;
     private float timeAlive = 0;
     private float timeSinceLastCapture = 0;
     private GhoostlingData data = new GhoostlingData();
     private bool recording = true;
-    private List<GhoostlingAction> actions = new List<GhoostlingAction>();
     public mouse_look cam;
     public GameObject viewModel;
     void Awake() {
-    }
-
-    public void ExecuteAndRecordAction(GhoostlingAction a) {
-        a.Trigger(actionMan);
-        actions.Add(a);
     }
 
     void Update() {
@@ -29,10 +22,12 @@ public class GhoostlingRecorder : MonoBehaviour {
         timeAlive += Time.deltaTime;
         timeSinceLastCapture += Time.deltaTime;
 
+        /*
         if (timeSinceLastCapture >= 1f/GhoostlingData.RATE) {
             data.AddFrame(CurrentFrame());
             timeSinceLastCapture = 0;
         }
+        */
 
         if (Input.GetKeyDown(KeyCode.G)) {
             StopRecording();
@@ -47,11 +42,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         f.position = transform.position;
         f.eulerAngles = transform.eulerAngles;
         f.cameraPitch = cam.xRotation;
-        if (actions.Count > 0) {
-            f.actions = new List<GhoostlingAction>();
-            f.actions.AddRange(actions);
-            actions.Clear();
-        }
+        // TODO expand?
         return f;
     }
 
@@ -62,7 +53,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         return recording;
     }
     public int GetDataId() {
-        return data.id;
+        return -1; // TODO remove
     }
     private void SpawnGhoostling() {
         gameObject.name += " (Recording)";

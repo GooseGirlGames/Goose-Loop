@@ -11,7 +11,6 @@ public class GhoostlingPlayer : MonoBehaviour {
     public const float FADE_IN_TIME = 4.0f;
     public mouse_look cam;
 
-    public GhoostlingActionManager actionMan;
     // Start is called before the first frame update
     void Awake() {
         mesh = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -46,7 +45,7 @@ public class GhoostlingPlayer : MonoBehaviour {
             transform.localScale = initialScale * (timeAlive / FADE_IN_TIME);
         }
 
-        GhoostlingData.Frame h = data.GetFrame(timeAlive);
+        GhoostlingData.Frame h = data.GetFrame((int)timeAlive);  // TODO stop complaining
 
         //Debug.Log("Time Alive: " + timeAlive + "; playing Frame at " + h.time);
 
@@ -54,10 +53,5 @@ public class GhoostlingPlayer : MonoBehaviour {
         transform.eulerAngles = h.eulerAngles;
         cam.xRotation = h.cameraPitch;
 
-        if (h.actions != null) {
-            foreach (GhoostlingAction action in h.actions) {
-                action.Trigger(actionMan);
-            }
-        }
     }
 }
