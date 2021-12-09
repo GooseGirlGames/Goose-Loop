@@ -28,6 +28,13 @@ public class Movement : MonoBehaviour {
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit) {
+
+        /*
+        TODO:
+            If the object that was hit is a goose and that goose's id is
+            higher than our id, push that goose out of the way.  Issue #17
+        */
+
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
