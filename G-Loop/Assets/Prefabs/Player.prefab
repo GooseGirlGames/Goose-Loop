@@ -456,7 +456,6 @@ GameObject:
   - component: {fileID: 6148273697556285585}
   - component: {fileID: 2343046417829334617}
   - component: {fileID: 2585357752878563871}
-  - component: {fileID: 6306420876632070785}
   - component: {fileID: 8537520993351814638}
   - component: {fileID: 4045397612735749029}
   m_Layer: 0
@@ -515,7 +514,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 6349239089560444316}
   ghoostlingHolder: {fileID: 0}
-  actionMan: {fileID: 6306420876632070785}
   resetEvents: []
   cam: {fileID: 6349239089116009941}
   viewModel: {fileID: 8315617001832338873}
@@ -532,7 +530,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 6349239089116009941}
-  actionMan: {fileID: 6306420876632070785}
 --- !u!82 &2585357752878563871
 AudioSource:
   m_ObjectHideFlags: 0
@@ -629,22 +626,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6306420876632070785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349239089560444316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d1fbe48040f21ed9e61b8f1c8e5319, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 2585357752878563871}
-  rec: {fileID: 6148273697556285585}
-  honk: {fileID: 11400000, guid: 62affabed3948bdfa82885b96890a823, type: 2}
-  movement: {fileID: 4045397612735749029}
 --- !u!114 &8537520993351814638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,7 +644,6 @@ MonoBehaviour:
   BehavioursWhileGhoostling:
   - {fileID: 4045397612735749029}
   BehavioursWhileRagdoll: []
-  BehavioursWhileIdle: []
   EnableDebugStateChangeKeys: 0
 --- !u!114 &4045397612735749029
 MonoBehaviour:
@@ -685,8 +665,6 @@ MonoBehaviour:
     m_Bits: 0
   anim: {fileID: 0}
   rec: {fileID: 0}
-  crouchAction: {fileID: 0}
-  uncrouchAction: {fileID: 0}
   pushPower: 10
   weight: 1
 --- !u!1001 &5695295256306657299
