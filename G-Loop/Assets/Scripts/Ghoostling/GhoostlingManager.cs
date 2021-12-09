@@ -76,6 +76,9 @@ public class GhoostlingManager : MonoBehaviour {
         // TODO UI stuff for delay
         paused = true;
         tick = 0;
+        foreach(var ghoostling in geese){
+            ghoostling.ResetTransformToSpawn();
+        }
         pauseTimeRemaining = PAUSE_TIME;
         StartCoroutine(UnpauseAfterDelay());
     }
