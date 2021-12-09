@@ -73,7 +73,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         GetComponentInChildren<AudioListener>().enabled = false;
         GetComponent<CharacterController>().enabled = false;
         GetComponentInChildren<mouse_look>().acceptInput = false;
-        GetComponent<movement>().enabled = false;
+        GetComponent<Movement>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Default");
         viewModel.SetActive(false);
@@ -102,7 +102,7 @@ public class GhoostlingRecorder : MonoBehaviour {
         g.GetComponentInChildren<AudioListener>().enabled = true;
         g.GetComponent<CharacterController>().enabled = true;
         g.GetComponentInChildren<mouse_look>().acceptInput = true;
-        g.GetComponent<movement>().enabled = true;
+        g.GetComponent<Movement>().enabled = true;
         g.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer =
                 LayerMask.NameToLayer("Player");
         g.GetComponent<GhoostlingRecorder>().viewModel.SetActive(true);

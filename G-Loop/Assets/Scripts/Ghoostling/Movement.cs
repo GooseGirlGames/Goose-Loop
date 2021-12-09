@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class movement : MonoBehaviour
-{
+public class Movement : MonoBehaviour {
+    public bool AcceptPlayerInput = true;
     public const float SPEED = 12f;
     private float speedFactor = 1f;
     public const float GRAVITY = -30f;
@@ -40,7 +40,7 @@ public class movement : MonoBehaviour
         }
         //Debug.Log(hit.moveDirection);
         if (hit.moveDirection.y < -0.3){
-            force = new Vector3(0f, 0.5f, 0f) * movement.GRAVITY * weight;
+            force = new Vector3(0f, 0.5f, 0f) * Movement.GRAVITY * weight;
             Debug.Log("IN THE AIR:" + force);
         }
         else{
@@ -55,6 +55,23 @@ public class movement : MonoBehaviour
 
     void Update() {
         isGrounded = IsGrounded();
+
+        if (AcceptPlayerInput) {
+            ProcessPlayerInput();
+        }
+    }
+
+    bool IsGrounded() {
+        return Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundLayer);
+    }
+
+    public void Crouch(bool crouch = true) {
+        anim.SetBool("Crouch", crouch);
+        speedFactor = crouch ? 0.5f : 1f;
+    }
+
+    private void ProcessPlayerInput() {
+
         float x = Snap(Input.GetAxis("Horizontal"));
         float z = Snap(Input.GetAxis("Vertical"));
 
@@ -77,14 +94,5 @@ public class movement : MonoBehaviour
         } else if (Input.GetButtonUp("Crouch")) {
             rec.ExecuteAndRecordAction(uncrouchAction);
         }
-    }
-
-    bool IsGrounded() {
-        return Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundLayer);
-    }
-
-    public void Crouch(bool crouch = true) {
-        anim.SetBool("Crouch", crouch);
-        speedFactor = crouch ? 0.5f : 1f;
     }
 }
