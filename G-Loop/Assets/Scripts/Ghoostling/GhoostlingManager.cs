@@ -100,8 +100,7 @@ public class GhoostlingManager : MonoBehaviour {
             }
             controller.Goose_FixedUpdate();
             if (controller.GetState() == GooseController.GooseState.GHOOSTLING) {
-                bool broken = controller.LoopIsBroken();
-                if (broken) {
+                if (controller.LoopIsBroken() && controller.LoopIsFixable()) {
                     Debug.Log("Loop broken!");
                     var loopBreak = new LoopBreakStackFrame();
                     loopBreak.isFixed = false;

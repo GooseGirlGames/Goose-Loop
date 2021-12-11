@@ -24,6 +24,7 @@ public class GooseController : MonoBehaviour {
     // Sadly, renderers are not behaviours, so they can't be managed by the lists :(
     public GameObject viewModel;
     public MeshRenderer playerModelRenderer;
+    public ExplodedFeathers feathers;
 
     /** All behaviours that should be active in the state.  Upon state
      * change, behaviours contained in other states' lists (but not in the list for the new active
@@ -173,6 +174,12 @@ public class GooseController : MonoBehaviour {
         }
 
         return broken;
+    }
+
+    public bool LoopIsFixable() {
+        feathers.Explode();
+        SetGooseEnabled(false);
+        return false;
     }
 
     public void ResetTransformToSpawn() {

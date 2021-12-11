@@ -9,7 +9,7 @@ public class ExplodedFeathers : MonoBehaviour {
         particleSystem.Stop();
     }
 
-    void Explode() {
+    public void Explode() {
         particleSystem.Emit(FEATHER_COUNT);
     }
 }
