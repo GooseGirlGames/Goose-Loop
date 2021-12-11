@@ -34,15 +34,16 @@ public class Movement : MonoBehaviour {
             higher than our id, push that goose out of the way.  Issue #17
         */
 
+        CharacterController ghoostling = hit.controller;
+
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
+        Debug.Log(ghoostling.name);
 
         if (body == null || body.isKinematic){
             return;
         }
-
-        Debug.Log("name " + hit);
 
         //Debug.Log(hit.moveDirection);
         if (hit.moveDirection.y < -0.3){
