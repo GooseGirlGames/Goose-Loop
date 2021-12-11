@@ -37,9 +37,12 @@ public class Movement : MonoBehaviour {
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
+
         if (body == null || body.isKinematic){
             return;
         }
+
+        Debug.Log("name " + hit);
 
         //Debug.Log(hit.moveDirection);
         if (hit.moveDirection.y < -0.3){
