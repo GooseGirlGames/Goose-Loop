@@ -187,9 +187,11 @@ public class GooseController : MonoBehaviour {
         return broken;
     }
 
-    public void ForceTransformToRecorded(GhoostlingData.Frame f) {
-        transform.position = f.position;
-        transform.rotation = Quaternion.Euler(f.eulerAngles);
+    public void ForceTransformToRecorded() {
+        int tick = gman.GetCurrentTick();
+        var frame = data.GetFrame(tick);
+        transform.position = frame.position;
+        transform.rotation = Quaternion.Euler(frame.eulerAngles);
     }
 
     public bool LoopIsFixable() {
