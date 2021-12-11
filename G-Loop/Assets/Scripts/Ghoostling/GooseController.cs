@@ -193,7 +193,6 @@ public class GooseController : MonoBehaviour {
         } else {
             loopBeakFixable = null;
         }
-        return false;
         return broken;
     }
 
