@@ -42,6 +42,7 @@ public class GooseController : MonoBehaviour {
     private GhoostlingManager gman;
     public bool EnableDebugStateChangeKeys = false;
     public static int SPAWN_INVULNERABILITY_TICKS = 500;
+    private int invulnerable = 0; 
     private bool? loopBeakFixable = null;
 
     void Awake(){
@@ -122,6 +123,10 @@ public class GooseController : MonoBehaviour {
         data.AddFrame(currentFrame);
     }
 
+    public void MakeInvulnerable(int time_span){
+        invulnerable = time_span;
+    }
+
     /** Fixed update for ghoostling.  Play frame. */
     private void FixedUpdateGhoostling() {
 
@@ -136,9 +141,14 @@ public class GooseController : MonoBehaviour {
         Movement.ProcessInputs(currentFrame.inputs);
         MouseLook.ProcessInputs(currentFrame.inputs);
 
-        bool invulnerable = tick < SPAWN_INVULNERABILITY_TICKS;
-        if (invulnerable) {
-            ForceTransformToRecorded(currentFrame);
+        if(gman.GetCurrentTick() == 0){
+            MakeInvulnerable(SPAWN_INVULNERABILITY_TICKS);
+        }
+
+        //bool invulnerable = tick < SPAWN_INVULNERABILITY_TICKS;
+        if (invulnerable > 0) {
+            ForceTransformToRecorded();
+            invulnerable--;
         }
 
         // check for broken movement is done in CheckForLoopBreak
@@ -183,7 +193,7 @@ public class GooseController : MonoBehaviour {
         } else {
             loopBeakFixable = null;
         }
-
+        return false;
         return broken;
     }
 

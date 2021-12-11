@@ -45,11 +45,11 @@ public class Movement : MonoBehaviour {
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
-        if (other_goose!= null && other_goose!= gcon){ 
-            if(other_goose.GetId() < gcon.GetId()){
-                Debug.Log("I get push: " + other_goose.GetId() + "   I push: " + gcon.GetId());
-                if(other_goose.GetError() >= 0.1f)
-                velocity.y = Mathf.Sqrt(120f);  
+        if (other_goose!= null){ 
+            if(other_goose.GetId() > gcon.GetId()){
+                Debug.Log("I get push: " + gcon.GetId() + "   I push: " + other_goose.GetId());
+                other_goose.Movement.velocity.y = Mathf.Sqrt(120f);
+                gcon.MakeInvulnerable(20);
                 //apply
             }
             else{
