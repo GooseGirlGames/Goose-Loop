@@ -143,7 +143,7 @@ public class GooseController : MonoBehaviour {
         _recorded_pos = currentFrame.position;
     }
 
-    public bool CheckForLoopBreak() {
+    public bool LoopIsBroken() {
 
         int tick = gman.GetCurrentTick();  // may or may not need +1
         var frame = data.GetFrame(tick);
@@ -159,7 +159,7 @@ public class GooseController : MonoBehaviour {
 
         _error = error;  // this member variable is only used for debug output
 
-        return error < 0.5f;
+        return error > 0.5f;
     }
 
     public void ResetTransformToSpawn() {

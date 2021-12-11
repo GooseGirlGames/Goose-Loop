@@ -9,11 +9,13 @@ public class GhoostlingManager : MonoBehaviour {
     public const float PAUSE_TIME = 3.0f;
     private const float PAUSE_STEP_TIME = 0.05f;  // changes update rate of debug text while paused
     public GameObject playerPrefab;
+    public List<GameObject> physicObjects = new List<GameObject>();
+    private List<Vector3> startPositions = new List<Vector3>();
+    private List<Quaternion> startRotations = new List<Quaternion>();
     private List<GooseController> geese = new List<GooseController>();
     private int tick;
     private bool paused = false;
     private float pauseTimeRemaining;
-    
     public void RegisterGoose(GooseController goose) {
         geese.Add(goose);
         Debug.Log("Registered " + goose.name + ".  Now managing " + geese.Count + " geese.");
@@ -21,6 +23,11 @@ public class GhoostlingManager : MonoBehaviour {
 
     void Start() {
         InitDebugMenuLines();
+        foreach (var item in physicObjects)
+        {
+            startPositions.Add(item.transform.position);
+            startRotations.Add(item.transform.rotation);
+        }
     }
 
     // Get current scene's GhooslingManager
@@ -51,7 +58,7 @@ public class GhoostlingManager : MonoBehaviour {
         foreach (var controller in geese) {
             controller.Goose_FixedUpdate();
             if (controller.GetState() == GooseController.GooseState.GHOOSTLING) {
-                bool broken = controller.CheckForLoopBreak();
+                bool broken = controller.LoopIsBroken();
                 if (broken) {
                     Debug.Log("Loop broken!");
                 }
@@ -78,6 +85,15 @@ public class GhoostlingManager : MonoBehaviour {
         tick = 0;
         foreach(var ghoostling in geese){
             ghoostling.ResetTransformToSpawn();
+        }
+        int i = 0;
+        foreach(var item in physicObjects){
+            Debug.Log("Object Reset " + item.transform.position + "vs." + startPositions[i] + " and " + item.transform.rotation + "vs." + startRotations[i]);
+            item.transform.position = startPositions[i];
+            item.transform.rotation = startRotations[i];
+            item.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            item.GetComponent<Rigidbody>().angularVelocity =  new Vector3(0, 0, 0);
+            i++;
         }
         pauseTimeRemaining = PAUSE_TIME;
         StartCoroutine(UnpauseAfterDelay());
