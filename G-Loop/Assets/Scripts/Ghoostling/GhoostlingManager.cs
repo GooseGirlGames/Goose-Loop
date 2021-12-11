@@ -6,16 +6,14 @@ using UnityEngine;
  * Exists once per Scene.  Transform position/rotation is Ghoosling spawn
  */
 public class GhoostlingManager : MonoBehaviour {
-    public const float PAUSE_TIME = 3.0f;
-    private const float PAUSE_STEP_TIME = 0.05f;  // changes update rate of debug text while paused
+    public const int PAUSE_TICKS = 300;
     public GameObject playerPrefab;
     public List<GameObject> physicObjects = new List<GameObject>();
     private List<Vector3> startPositions = new List<Vector3>();
     private List<Quaternion> startRotations = new List<Quaternion>();
     private List<GooseController> geese = new List<GooseController>();
     private int tick;
-    private bool paused = false;
-    private float pauseTimeRemaining;
+    private int pauseTicksRemaining;
     private struct LoopBreakStackFrame {
         public int tick;
         public int originGooseId;  // the goose we'll go back to when popping the frame
@@ -23,7 +21,7 @@ public class GhoostlingManager : MonoBehaviour {
         public bool isFixed;
     }
     private Stack<LoopBreakStackFrame> loopBreaks = new Stack<LoopBreakStackFrame>();
-    private const float FAST_FORWARD_SPEED = 1f;  // TODO make ff fast, duh (kalt)
+    private const float FAST_FORWARD_SPEED = 30f;  // TODO make ff fast, duh (kalt)
     private const int NOT_FAST_FORWARDING = -1;
 
     private int fastForwardStopAt = NOT_FAST_FORWARDING;
@@ -63,8 +61,10 @@ public class GhoostlingManager : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (paused) {
+        if (pauseTicksRemaining > 0) {
             UpdateDebugMenuText();
+            --pauseTicksRemaining;
+            tick = 0;  // urgh
             return;
         }
 
@@ -83,7 +83,6 @@ public class GhoostlingManager : MonoBehaviour {
                 int newActiveGooseId;
                 if (loopBreak.isFixed) {
                     newActiveGooseId = loopBreak.originGooseId;
-                    DisableGeeseAfter(newActiveGooseId);  // re-enable all geese
                     loopBreaks.Pop();
                 } else {
                     newActiveGooseId = loopBreak.brokenGooseId;
@@ -93,7 +92,7 @@ public class GhoostlingManager : MonoBehaviour {
             }
         }
 
-        ++tick;
+        // ++tick;
 
         foreach (var controller in geese) {
             if (!controller.IsGooseEnabled()) {
@@ -113,7 +112,9 @@ public class GhoostlingManager : MonoBehaviour {
                     loopBreak.brokenGooseId = brokenGoose.GetId();
                     loopBreaks.Push(loopBreak);
                     DisableGeeseAfter(brokenGoose.GetId());
-                    ResetTick();
+                    brokenGoose.SetState(GooseController.GooseState.GHOOSTLING);  // until FF ends
+                    fastForwardStopAt = loopBreak.tick;
+                    ResetTick(doPause: false);
                     return;
                     //activeGoose.SetGooseEnabled(false);  // will need to re-enable when popping
                     //JumpToTick(tick);
@@ -128,22 +129,19 @@ public class GhoostlingManager : MonoBehaviour {
 
 
         UpdateDebugMenuText();
+
+        ++tick;
     }
+
+    // disable all geese with id greater than the given gooseId
     private void DisableGeeseAfter(int gooseId) {
         foreach (var goose in geese) {
-            goose.SetGooseEnabled(goose.GetId() < gooseId);
+            goose.SetGooseEnabled(goose.GetId() <= gooseId);
         }
     }
-    private IEnumerator UnpauseAfterDelay() {
-        while(pauseTimeRemaining > 0) {
-            yield return new WaitForSeconds(PAUSE_STEP_TIME);
-            pauseTimeRemaining -= PAUSE_STEP_TIME;
-        }
-        paused = false;
-    }
-    private void ResetTick() {
+
+    private void ResetTick(bool doPause = true) {
         // TODO UI stuff for delay
-        paused = true;
         tick = 0;
         foreach(var ghoostling in geese){
             ghoostling.ResetTransformToSpawn();
@@ -156,8 +154,7 @@ public class GhoostlingManager : MonoBehaviour {
             item.GetComponent<Rigidbody>().angularVelocity =  new Vector3(0, 0, 0);
             i++;
         }
-        pauseTimeRemaining = PAUSE_TIME;
-        StartCoroutine(UnpauseAfterDelay());
+        pauseTicksRemaining = doPause ? PAUSE_TICKS : 10;
     }
 
     private void FastForward(int toTick) {
@@ -168,18 +165,24 @@ public class GhoostlingManager : MonoBehaviour {
         if (loopBreaks.Count == 0) {
             SpawnActiveGoose();
         } else {
-            var loopBreak = loopBreaks.Peek();
+            var loopBreak = loopBreaks.Pop();  // .Peek() returns a fucking copy of the element...
             var fixedGoose = GetGoose(loopBreak.brokenGooseId);
 
             fixedGoose.SetState(GooseController.GooseState.GHOOSTLING);
             // newActiveGoose will be activated in FixedUpdate, when the frame is popped.
-            loopBreak.isFixed = true;
+
+            loopBreak.isFixed = true;  // ...so this would have no effect if...
+            loopBreaks.Push(loopBreak);  // ...we didn't Pop and Push the element.
+            
+
+            DisableGeeseAfter(loopBreak.originGooseId);  // re-enable all geese
+
             fastForwardStopAt = loopBreak.tick;
+            ResetTick(doPause: false);
         }
     }
 
     public void SpawnActiveGoose() {
-        Debug.Log("Spawning new Goose at t=" + tick);
 
         GooseController activeGoose = geese[geese.Count - 1];
         activeGoose.ResetTransformToSpawn();
@@ -215,8 +218,8 @@ public class GhoostlingManager : MonoBehaviour {
     private void UpdateDebugMenuText() {
         var debug = DebugMenu.GetInstance();
         string pauseText = "";
-        if (paused) {
-            pauseText += "PAUSED for " + pauseTimeRemaining.ToString("F2") + "secs";
+        if (pauseTicksRemaining > 0) {
+            pauseText += "PAUSED for " + pauseTicksRemaining + " ticks";
         }
         if (fastForwardStopAt != NOT_FAST_FORWARDING) {
             pauseText += " FF to " + fastForwardStopAt;
@@ -227,7 +230,8 @@ public class GhoostlingManager : MonoBehaviour {
         if (loopBreaks.Count > 0) {
             var f = loopBreaks.Peek();
             stackText += " Goose " + f.originGooseId
-                    + " broke " + f.brokenGooseId + " at t=" + f.tick;
+                    + " broke " + f.brokenGooseId + " at t=" + f.tick
+                    + (f.isFixed ? "fixed" : "unfixed");
         }
         debug.UpdateLine(_debug_line_break_stack, stackText);
     }

@@ -77,10 +77,6 @@ public class GooseController : MonoBehaviour {
     }
 
     public void Goose_FixedUpdate() {
-        if (!gooseEnabled) {
-            return;
-        }
-
         switch(state) {
             case (GooseState.ACTIVE):
                 FixedUpdateActive();
@@ -125,8 +121,9 @@ public class GooseController : MonoBehaviour {
 
     /** Fixed update for ghoostling.  Play frame. */
     private void FixedUpdateGhoostling() {
+
         int tick = gman.GetCurrentTick();
-        if (tick > data.GetFrameCount()) {
+        if (tick >= data.GetFrameCount()) {
             Debug.LogWarning(GenerateName() + " ran out of ticks to replay.");
             return;
         }
@@ -151,7 +148,7 @@ public class GooseController : MonoBehaviour {
     public bool LoopIsBroken() {
 
         int tick = gman.GetCurrentTick();
-        if (tick > data.GetFrameCount()) {
+        if (tick >= data.GetFrameCount()) {
             Debug.Log(GenerateName() + " broke due to lack of data.");
             return true;
         }
@@ -183,16 +180,16 @@ public class GooseController : MonoBehaviour {
         transform.eulerAngles = gman.transform.eulerAngles;
     }
 
-    public void SetGooseEnabled(bool gooseEnabled) {
+    public void SetGooseEnabled(bool gooseEnabled) {  // TODO rename to hide?
         this.gooseEnabled = gooseEnabled;
         if (!gooseEnabled) {
+            SetState(GooseState.GHOOSTLING);
             viewModel.SetActive(false);
             playerModelRenderer.enabled = false;
         } else {
             viewModel.SetActive(state == GooseState.ACTIVE);
             playerModelRenderer.enabled = (state != GooseState.ACTIVE);
         }
-        
     }
     public bool IsGooseEnabled() {
         return gooseEnabled;
@@ -228,6 +225,8 @@ public class GooseController : MonoBehaviour {
 
         viewModel.SetActive(state == GooseState.ACTIVE);
         playerModelRenderer.enabled = (state != GooseState.ACTIVE);
+
+        Debug.Log("Goose #" + GetId() + " changed state to " + state.ToString());
     }
 
     public GooseState GetState() {
@@ -249,7 +248,8 @@ public class GooseController : MonoBehaviour {
         if (state != GooseState.GHOOSTLING) {
             errorString = "N/A";
         }
-        debug.UpdateLine(_debug_line, "G" + GetId() + " breakError: " + errorString);
+        debug.UpdateLine(_debug_line, "G" + GetId() + "  breakError: " + errorString +
+         "  frame count: " + data.GetFrameCount());
     }
     private void OnDrawGizmos() {
         Gizmos.color = Color.blue;

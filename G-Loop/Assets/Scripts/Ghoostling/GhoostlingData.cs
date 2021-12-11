@@ -65,7 +65,14 @@ public class GhoostlingData {
     private List<Frame> frames = new List<Frame>();
 
     public void AddFrame(Frame f) {
-        frames.Add(f);
+        if (f.tick == frames.Count) {
+            frames.Add(f);
+        } else if (f.tick < frames.Count) {
+            frames[f.tick] = f;
+        } else {
+            Debug.LogWarning("Missing frames, cannot add frame with t=" + f.tick +
+                " when there are only " + frames.Count + " frames total.");
+        }
     }
 
     public Frame GetFrame(int tick) {
