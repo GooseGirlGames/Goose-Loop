@@ -16,9 +16,24 @@ public class GhoostlingManager : MonoBehaviour {
     private int tick;
     private bool paused = false;
     private float pauseTimeRemaining;
+    private struct LoopBreakStackFrame {
+        public int tick;
+        public int originGooseId;  // the goose we'll go back to when popping the frame
+        public int brokenGooseId;
+        public bool isFixed;
+    }
+    private Stack<LoopBreakStackFrame> loopBreaks = new Stack<LoopBreakStackFrame>();
+    private const float FAST_FORWARD_SPEED = 1f;  // TODO make ff fast, duh (kalt)
+    private const int NOT_FAST_FORWARDING = -1;
+
+    private int fastForwardStopAt = NOT_FAST_FORWARDING;
     public void RegisterGoose(GooseController goose) {
         geese.Add(goose);
         Debug.Log("Registered " + goose.name + ".  Now managing " + geese.Count + " geese.");
+    }
+
+    private GooseController GetGoose(int id) {
+        return geese[id];
     }
 
     void Start() {
@@ -53,24 +68,71 @@ public class GhoostlingManager : MonoBehaviour {
             return;
         }
 
+        if (fastForwardStopAt != NOT_FAST_FORWARDING) {
+            if (tick == fastForwardStopAt) {
+                fastForwardStopAt = NOT_FAST_FORWARDING;
+                Time.timeScale = 1;
+            } else {
+                Time.timeScale = FAST_FORWARD_SPEED;
+            }
+        }
+
+        if (loopBreaks.Count != 0) {
+            var loopBreak = loopBreaks.Peek();
+            if (tick == loopBreak.tick) {
+                int newActiveGooseId;
+                if (loopBreak.isFixed) {
+                    newActiveGooseId = loopBreak.originGooseId;
+                    DisableGeeseAfter(newActiveGooseId);  // re-enable all geese
+                    loopBreaks.Pop();
+                } else {
+                    newActiveGooseId = loopBreak.brokenGooseId;
+                }
+                var newActiveGoose = GetGoose(newActiveGooseId);
+                newActiveGoose.SetState(GooseController.GooseState.ACTIVE);
+            }
+        }
+
         ++tick;
 
         foreach (var controller in geese) {
+            if (!controller.IsGooseEnabled()) {
+                continue;
+            }
             controller.Goose_FixedUpdate();
             if (controller.GetState() == GooseController.GooseState.GHOOSTLING) {
                 bool broken = controller.LoopIsBroken();
                 if (broken) {
                     Debug.Log("Loop broken!");
+                    var loopBreak = new LoopBreakStackFrame();
+                    loopBreak.isFixed = false;
+                    loopBreak.tick = tick;  // may or may not need to be tick-1
+                    var activeGoose = GetActiveGoose();
+                    var brokenGoose = controller;
+                    loopBreak.originGooseId = activeGoose.GetId();
+                    loopBreak.brokenGooseId = brokenGoose.GetId();
+                    loopBreaks.Push(loopBreak);
+                    DisableGeeseAfter(brokenGoose.GetId());
+                    ResetTick();
+                    return;
+                    //activeGoose.SetGooseEnabled(false);  // will need to re-enable when popping
+                    //JumpToTick(tick);
+                    //brokenGoose.SetState(GooseController.GooseState.ACTIVE);
                 }
             }
         }
         
         if (Input.GetKeyDown(KeyCode.G)) {
-            SpawnActiveGoose();
+            EndLoop();
         }
 
 
         UpdateDebugMenuText();
+    }
+    private void DisableGeeseAfter(int gooseId) {
+        foreach (var goose in geese) {
+            goose.SetGooseEnabled(goose.GetId() < gooseId);
+        }
     }
     private IEnumerator UnpauseAfterDelay() {
         while(pauseTimeRemaining > 0) {
@@ -88,7 +150,6 @@ public class GhoostlingManager : MonoBehaviour {
         }
         int i = 0;
         foreach(var item in physicObjects){
-            Debug.Log("Object Reset " + item.transform.position + "vs." + startPositions[i] + " and " + item.transform.rotation + "vs." + startRotations[i]);
             item.transform.position = startPositions[i];
             item.transform.rotation = startRotations[i];
             item.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
@@ -97,6 +158,24 @@ public class GhoostlingManager : MonoBehaviour {
         }
         pauseTimeRemaining = PAUSE_TIME;
         StartCoroutine(UnpauseAfterDelay());
+    }
+
+    private void FastForward(int toTick) {
+        fastForwardStopAt = toTick;
+    }
+
+    public void EndLoop() {
+        if (loopBreaks.Count == 0) {
+            SpawnActiveGoose();
+        } else {
+            var loopBreak = loopBreaks.Peek();
+            var fixedGoose = GetGoose(loopBreak.brokenGooseId);
+
+            fixedGoose.SetState(GooseController.GooseState.GHOOSTLING);
+            // newActiveGoose will be activated in FixedUpdate, when the frame is popped.
+            loopBreak.isFixed = true;
+            fastForwardStopAt = loopBreak.tick;
+        }
     }
 
     public void SpawnActiveGoose() {
@@ -127,9 +206,11 @@ public class GhoostlingManager : MonoBehaviour {
 
     // Debug stuff
     private int _debug_line_tick;
+    private int _debug_line_break_stack;
     private void InitDebugMenuLines() {
         var debug = DebugMenu.GetInstance();
         _debug_line_tick = debug.RegisterLine();
+        _debug_line_break_stack = debug.RegisterLine();
     }
     private void UpdateDebugMenuText() {
         var debug = DebugMenu.GetInstance();
@@ -137,6 +218,17 @@ public class GhoostlingManager : MonoBehaviour {
         if (paused) {
             pauseText += "PAUSED for " + pauseTimeRemaining.ToString("F2") + "secs";
         }
+        if (fastForwardStopAt != NOT_FAST_FORWARDING) {
+            pauseText += " FF to " + fastForwardStopAt;
+        }
         debug.UpdateLine(_debug_line_tick, "tick: " + tick + " " + pauseText);
+
+        string stackText = "Break stack: " + loopBreaks.Count + ".";
+        if (loopBreaks.Count > 0) {
+            var f = loopBreaks.Peek();
+            stackText += " Goose " + f.originGooseId
+                    + " broke " + f.brokenGooseId + " at t=" + f.tick;
+        }
+        debug.UpdateLine(_debug_line_break_stack, stackText);
     }
 }

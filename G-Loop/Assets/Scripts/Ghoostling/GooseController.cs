@@ -15,6 +15,7 @@ public class GooseController : MonoBehaviour {
 
     private int id;
     private static int count = 0;  // used to generate id
+    private bool gooseEnabled = true;  // disabled Geese will be hidden and won't be updated
 
     /** References to commonly accessed behaviours. */
     public Movement Movement;
@@ -76,6 +77,10 @@ public class GooseController : MonoBehaviour {
     }
 
     public void Goose_FixedUpdate() {
+        if (!gooseEnabled) {
+            return;
+        }
+
         switch(state) {
             case (GooseState.ACTIVE):
                 FixedUpdateActive();
@@ -166,7 +171,9 @@ public class GooseController : MonoBehaviour {
 
         bool broken = error > 0.5f;
 
-        Debug.Log(GenerateName() + " broke due to position mismatch.");
+        if (broken) {
+            Debug.Log(GenerateName() + " broke due to position mismatch.");
+        }
 
         return broken;
     }
@@ -174,6 +181,21 @@ public class GooseController : MonoBehaviour {
     public void ResetTransformToSpawn() {
         transform.position = gman.transform.position;
         transform.eulerAngles = gman.transform.eulerAngles;
+    }
+
+    public void SetGooseEnabled(bool gooseEnabled) {
+        this.gooseEnabled = gooseEnabled;
+        if (!gooseEnabled) {
+            viewModel.SetActive(false);
+            playerModelRenderer.enabled = false;
+        } else {
+            viewModel.SetActive(state == GooseState.ACTIVE);
+            playerModelRenderer.enabled = (state != GooseState.ACTIVE);
+        }
+        
+    }
+    public bool IsGooseEnabled() {
+        return gooseEnabled;
     }
 
     public int GetId() {
