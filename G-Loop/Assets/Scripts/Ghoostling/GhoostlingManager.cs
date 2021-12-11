@@ -193,7 +193,9 @@ public class GhoostlingManager : MonoBehaviour {
         GooseController controller = newGoose.GetComponent<GooseController>();
         controller.ResetTransformToSpawn();
         controller.SetState(GooseController.GooseState.ACTIVE);
-        
+
+        // enable all geese
+        DisableGeeseAfter(controller.GetId());
     }
 
     public GooseController GetActiveGoose() {

@@ -41,6 +41,7 @@ public class GooseController : MonoBehaviour {
     private GhoostlingData data;
     private GhoostlingManager gman;
     public bool EnableDebugStateChangeKeys = false;
+    public static int SPAWN_INVULNERABILITY_TICKS = 500;
 
     void Awake(){
         id = GooseController.count++;
@@ -133,6 +134,12 @@ public class GooseController : MonoBehaviour {
         var currentFrame = data.GetFrame(tick);
         Movement.ProcessInputs(currentFrame.inputs);
         MouseLook.ProcessInputs(currentFrame.inputs);
+
+        bool invulnerable = tick < SPAWN_INVULNERABILITY_TICKS;
+        if (invulnerable) {
+            transform.position = currentFrame.position;
+            transform.rotation = Quaternion.Euler(currentFrame.eulerAngles);
+        }
 
         // check for broken movement is done in CheckForLoopBreak
 
