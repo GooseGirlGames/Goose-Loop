@@ -115,6 +115,16 @@ public class GhoostlingManager : MonoBehaviour {
         
     }
 
+    public GooseController GetActiveGoose() {
+        foreach (var goose in geese) {
+            if (goose.GetState() == GooseController.GooseState.ACTIVE) {
+                return goose;
+            }
+        }
+        Debug.LogError("No active goose found.");
+        return null;
+    }
+
     // Debug stuff
     private int _debug_line_tick;
     private void InitDebugMenuLines() {
