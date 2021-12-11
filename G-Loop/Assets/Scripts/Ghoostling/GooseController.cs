@@ -137,8 +137,7 @@ public class GooseController : MonoBehaviour {
 
         bool invulnerable = tick < SPAWN_INVULNERABILITY_TICKS;
         if (invulnerable) {
-            transform.position = currentFrame.position;
-            transform.rotation = Quaternion.Euler(currentFrame.eulerAngles);
+            ForceTransformToRecorded(currentFrame);
         }
 
         // check for broken movement is done in CheckForLoopBreak
@@ -181,6 +180,11 @@ public class GooseController : MonoBehaviour {
         }
 
         return broken;
+    }
+
+    public void ForceTransformToRecorded(GhoostlingData.Frame f) {
+        transform.position = f.position;
+        transform.rotation = Quaternion.Euler(f.eulerAngles);
     }
 
     public bool LoopIsFixable() {
