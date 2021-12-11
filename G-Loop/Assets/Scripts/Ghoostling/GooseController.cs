@@ -42,6 +42,7 @@ public class GooseController : MonoBehaviour {
     private GhoostlingManager gman;
     public bool EnableDebugStateChangeKeys = false;
     public static int SPAWN_INVULNERABILITY_TICKS = 500;
+    private bool? loopBeakFixable = null;
 
     void Awake(){
         id = GooseController.count++;
@@ -157,6 +158,7 @@ public class GooseController : MonoBehaviour {
         int tick = gman.GetCurrentTick();
         if (tick >= data.GetFrameCount()) {
             Debug.Log(GenerateName() + " broke due to lack of data.");
+            loopBeakFixable = true;
             return true;
         }
 
@@ -176,7 +178,10 @@ public class GooseController : MonoBehaviour {
         bool broken = error > 0.5f;
 
         if (broken) {
+            loopBeakFixable = false;
             Debug.Log(GenerateName() + " broke due to position mismatch.");
+        } else {
+            loopBeakFixable = null;
         }
 
         return broken;
@@ -188,9 +193,18 @@ public class GooseController : MonoBehaviour {
     }
 
     public bool LoopIsFixable() {
-        feathers.Explode();
-        SetGooseEnabled(false);
-        return false;
+        if (loopBeakFixable is bool fixable) {
+            if (fixable) {
+                return true;
+            } else {
+                feathers.Explode();
+                SetGooseEnabled(false);
+                return false;
+            }
+        } else {
+            Debug.LogWarning("LoopIsFixable called even though loop it not broken.");
+            return false;
+        }
     }
 
     public void ResetTransformToSpawn() {

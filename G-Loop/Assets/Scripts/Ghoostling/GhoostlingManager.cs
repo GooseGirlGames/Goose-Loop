@@ -208,6 +208,10 @@ public class GhoostlingManager : MonoBehaviour {
         return null;
     }
 
+    public bool IsFastForwarding() {
+        return fastForwardStopAt != NOT_FAST_FORWARDING;
+    }
+
     // Debug stuff
     private int _debug_line_tick;
     private int _debug_line_break_stack;
