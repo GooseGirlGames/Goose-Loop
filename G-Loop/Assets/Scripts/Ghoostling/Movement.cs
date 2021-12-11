@@ -22,11 +22,18 @@ public class Movement : MonoBehaviour {
     public Animator anim;
     public float pushPower = 10f;
     public float weight = 1f;
-    
+    private GhoostlingManager gman;
+    private GooseController gcon;
+    private void Start() {
+        gman = GhoostlingManager.GetInstance();
+        gcon = GetComponentInChildren<GooseController>();
+    }
+
     private static float Snap(float d) {
         return Mathf.Sign(d) * Mathf.Pow(Mathf.Abs(d), MOVEMENT_SNAPINESS);
     }
 
+//------------------------------------------------------------------------------------------------------------------------------
     private void OnControllerColliderHit(ControllerColliderHit hit) {
         /*
         TODO:
@@ -34,12 +41,16 @@ public class Movement : MonoBehaviour {
             higher than our id, push that goose out of the way.  Issue #17
         */
 
-        CharacterController ghoostling = hit.controller;
+        GooseController ghoostling = hit.controller.GetComponentInChildren<GooseController>();
 
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
-        Debug.Log(ghoostling.name);
+        if (ghoostling != null && ghoostling != gcon){ 
+            if(gcon.GetState() == GooseController.GooseState.ACTIVE)
+                Debug.Log("Collided Goose: " + ghoostling.GetId());
+        }
+
 
         if (body == null || body.isKinematic){
             return;
@@ -53,6 +64,7 @@ public class Movement : MonoBehaviour {
         }
         body.AddForceAtPosition(force, hit.point);
     }
+//------------------------------------------------------------------------------------------------------------------------------
 
     void FixedUpdate() {
         // Inputs are managed by GooseController, which invokes the ProcessInputs method
