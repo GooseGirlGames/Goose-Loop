@@ -41,14 +41,22 @@ public class Movement : MonoBehaviour {
             higher than our id, push that goose out of the way.  Issue #17
         */
 
-        GooseController ghoostling = hit.controller.GetComponentInChildren<GooseController>();
-
+        GooseController other_goose= hit.gameObject.GetComponentInChildren<GooseController>();
         Rigidbody body = hit.collider.attachedRigidbody;
         Vector3 force;
 
-        if (ghoostling != null && ghoostling != gcon){ 
-            if(gcon.GetState() == GooseController.GooseState.ACTIVE)
-                Debug.Log("Collided Goose: " + ghoostling.GetId());
+        if (other_goose!= null && other_goose!= gcon){ 
+            if(other_goose.GetId() < gcon.GetId()){
+                Debug.Log("I get push: " + other_goose.GetId() + "   I push: " + gcon.GetId());
+                if(other_goose.GetError() >= 0.1f)
+                velocity.y = Mathf.Sqrt(120f);  
+                //apply
+            }
+            else{
+                Debug.Log("I am a stone: " + other_goose.GetId());
+            }
+            /* if(gcon.GetState() == GooseController.GooseState.ACTIVE)
+                Debug.Log("Collided Goose: " + other_goose.GetId()); */
         }
 
 

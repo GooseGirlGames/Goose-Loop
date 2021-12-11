@@ -217,6 +217,10 @@ public class GooseController : MonoBehaviour {
         return id;
     }
 
+    public float GetError() {
+        return _error;
+    }
+
     public string GenerateName() {
         return "Goose #" + GetId() + " (" + GetState().ToString() + ")";
     }
