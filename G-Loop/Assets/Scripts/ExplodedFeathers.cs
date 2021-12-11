@@ -9,6 +9,7 @@ public class ExplodedFeathers : MonoBehaviour {
     public GhoostlingManager gman;
     public const int FEATHER_COUNT = 400;
     void Start() {
+        gman = GhoostlingManager.GetInstance();
         particleSystem.Stop();
     }
 
