@@ -145,7 +145,12 @@ public class GooseController : MonoBehaviour {
 
     public bool LoopIsBroken() {
 
-        int tick = gman.GetCurrentTick();  // may or may not need +1
+        int tick = gman.GetCurrentTick();
+        if (tick > data.GetFrameCount()) {
+            Debug.Log(GenerateName() + " broke due to lack of data.");
+            return true;
+        }
+
         var frame = data.GetFrame(tick);
         var deltaPosition = transform.position - frame.position;
 
@@ -159,7 +164,11 @@ public class GooseController : MonoBehaviour {
 
         _error = error;  // this member variable is only used for debug output
 
-        return error > 0.5f;
+        bool broken = error > 0.5f;
+
+        Debug.Log(GenerateName() + " broke due to position mismatch.");
+
+        return broken;
     }
 
     public void ResetTransformToSpawn() {
