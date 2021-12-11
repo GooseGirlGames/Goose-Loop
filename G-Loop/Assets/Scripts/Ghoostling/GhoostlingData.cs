@@ -5,79 +5,81 @@ using UnityEngine;
 
 public class GhoostlingData {
 
-    public const float RATE = 30f;  // Hz, should ideally be greater than 1
-    public static int count = 0;
-    public int id;
-    public List<Frame> frames = new List<Frame>();
-    public List<int> frameIdxAtSecond = new List<int>();
-    private float lastFrameTime;
-
-    private int last_prev_idx;
-    public GhoostlingData() {
-        id = GhoostlingData.count;
-        GhoostlingData.count += 1;
-    }
-    public void AddFrame(Frame f) {
-        frames.Add(f);
-        int secs = Mathf.FloorToInt(f.time);
-        if (secs >= frameIdxAtSecond.Count) {
-            frameIdxAtSecond.Add(frames.Count - 1);
+    // Note: doesn't account mouse inputs -- camera is just set according to
+    // eulerAngles and cameraPitch.
+    public struct UserInputs {
+        public float horizontal;  // result of Input.GetAxis("Horizontal")
+        public float vertical;  // result of Input.GetAxis("Vertical")
+        public float mouseX;
+        public float mouseY;
+        public bool jumpButtonDown;
+        public bool jumpButtonUp;
+        public bool crouchButtonDown;
+        public bool crouchButtonUp;
+        // public bool honkButtonDown;
+        // public bool honkButtonUp;
+        public static int READ_USER_INPUTS = -1;
+        public UserInputs(int meow) {  // Need a signature different from UserInputs()
+                                       // Would recommend passing READ_USER_INPUTS for clarity :)
+            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis("Vertical");
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
+            jumpButtonDown = Input.GetButtonDown("Jump");
+            jumpButtonUp = Input.GetButtonUp("Jump");
+            crouchButtonDown = Input.GetButtonDown("Crouch");
+            crouchButtonUp = Input.GetButtonUp("Crouch");
+            // honkButtonDown = Input.GetButtonDown("Honk");
+            // honkButtonUp = Input.GetButtonUp("Honk");
         }
-        lastFrameTime = f.time;
+    }
+    public struct ShotFired {
+        public Vector3 origin;
+        public Vector3 direction_normalized;
+        public float speed;
+    }
+    public struct ItemInteraction {
+        // TODO:
+        //public Item pickUp;
+        //Item select;
+    }
+    public struct Death {
+        public enum Cause {
+            EXTERNAL,
+            SUICIDE,
+        };
+        public Cause cause;
+    }
+    public struct NonBreakZone {
+        public bool ignoreAxisY;
     }
     public struct Frame {
-        public float time;
+        public int tick;
+        public UserInputs inputs;
         public Vector3 position;
         public Vector3 eulerAngles;
-        public float cameraPitch;
-        public List<GhoostlingAction> actions;
+        public ShotFired? shotFired;
+        public ItemInteraction? itemInteraction;
+        public NonBreakZone? nonBreakZone;
     }
-    public class FramePair {
-        public Frame prev;
-        public Frame next;
-        public Frame Interpolate(float time) {
-            float t = (time - prev.time) / (next.time - prev.time);
-            Frame h = new Frame();
-            h.time = time;
-            h.position = Vector3.Lerp(prev.position , next.position , t);
+    private List<Frame> frames = new List<Frame>();
 
-            // lerping euler angles is a bit more complicated
-            Quaternion q_prev = Quaternion.Euler(prev.eulerAngles);
-            Quaternion q_next = Quaternion.Euler(next.eulerAngles);
-            Quaternion q_h = Quaternion.Lerp(q_prev, q_next, t);
-            h.eulerAngles = q_h.eulerAngles;
-
-            h.cameraPitch = Mathf.Lerp(prev.cameraPitch, next.cameraPitch, t);
-
-            return h;
+    public void AddFrame(Frame f) {
+        if (f.tick == frames.Count) {
+            frames.Add(f);
+        } else if (f.tick < frames.Count) {
+            frames[f.tick] = f;
+        } else {
+            Debug.LogWarning("Missing frames, cannot add frame with t=" + f.tick +
+                " when there are only " + frames.Count + " frames total.");
         }
     }
 
-    public Frame GetFrame(float timeAlive) {
+    public Frame GetFrame(int tick) {
+        return frames[tick];
+    }
 
-        if (timeAlive > lastFrameTime) {
-            timeAlive = lastFrameTime;
-        }
-
-        int idx_full_sec = frameIdxAtSecond[Mathf.FloorToInt(timeAlive)];
-
-        int idx_prev = idx_full_sec;
-        while(idx_prev < frames.Count && frames[idx_prev + 1].time < timeAlive) {
-            ++idx_prev;
-        }
-        FramePair p = new FramePair();
-        p.prev = frames[idx_prev];
-        p.next = frames[idx_prev+1];
-
-        Frame interpolated = p.Interpolate(timeAlive);
-
-        // if this is the first time we're dealing with the `prev` frame,
-        // execute all its actions
-        if (last_prev_idx != idx_prev) {
-            interpolated.actions = frames[idx_prev].actions;
-        }
-
-        last_prev_idx = idx_prev;
-        return interpolated;
+    public int GetFrameCount() {
+        return frames.Count;
     }
 }
