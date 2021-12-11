@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 9e076167040e9d1dc8a50c8955233236
+=======
+guid: 9337cbfa2af86d9918929de161a02fc1
+>>>>>>> 5970e44 (new Bullet to shoot good)
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
