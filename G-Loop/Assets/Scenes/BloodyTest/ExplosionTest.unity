@@ -841,7 +841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4d6ad86a98b40bcbe934539dd935e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 2763078377617042940, guid: 783a62976afd1ff31a09c2d8de7a1a9a, type: 3}
+  gun: {fileID: 8666525715951858087, guid: 43346d3ceb07f1be2a483f7e4063a106, type: 3}
   spawn: {fileID: 27831961}
   reload_warning: {fileID: 981903420}
   bullet1: {fileID: 1412240288}
