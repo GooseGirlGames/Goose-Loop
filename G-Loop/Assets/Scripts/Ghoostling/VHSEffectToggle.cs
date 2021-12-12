@@ -9,6 +9,6 @@ public class VHSEffectToggle : MonoBehaviour {
         gman = GhoostlingManager.GetInstance();
     }
     void Update() {
-        effect.enabled = gman.IsFastForwarding();
+        effect.enabled = gman.IsFastForwarding() || gman.IsPaused();
     }
 }

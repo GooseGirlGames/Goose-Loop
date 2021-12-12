@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainUI : MonoBehaviour {
     public Canvas canvas;
     public Image fastForward;
+    public Image pause;
     private GhoostlingManager gman;
     // Start is called before the first frame update
     void Start() {
@@ -25,5 +26,6 @@ public class MainUI : MonoBehaviour {
     // Update is called once per frame
     private void OnGUI() {
         fastForward.enabled = gman.IsFastForwarding();
+        pause.enabled = gman.IsPaused();
     }
 }
