@@ -41,7 +41,7 @@ public class GooseController : MonoBehaviour {
     private GhoostlingData data;
     private GhoostlingManager gman;
     public bool EnableDebugStateChangeKeys = false;
-    public static int SPAWN_INVULNERABILITY_TICKS = 500;
+    public static int SPAWN_INVULNERABILITY_TICKS = 100;
     private int invulnerable = 0; 
     private bool? loopBeakFixable = null;
 

@@ -14,7 +14,7 @@ public class ExplodedFeathers : MonoBehaviour {
     }
 
     public void Explode() {
-        if (gman.IsFastForwarding()) {
+        if (gman.IsFastForwarding() || gman.IsPaused()) {
             return;
         }
         audioSource.PlayOneShot(explode);

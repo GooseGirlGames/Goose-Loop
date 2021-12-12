@@ -9,6 +9,7 @@ public class GhoostlingManager : MonoBehaviour {
     public const int PAUSE_TICKS = 300;
     public GameObject playerPrefab;
     public List<GameObject> physicObjects = new List<GameObject>();
+    public int maximumTick = 3000;
     private List<Vector3> startPositions = new List<Vector3>();
     private List<Quaternion> startRotations = new List<Quaternion>();
     private List<GooseController> geese = new List<GooseController>();
@@ -68,6 +69,10 @@ public class GhoostlingManager : MonoBehaviour {
             return;
         }
 
+        if (tick == maximumTick) {
+            EndLoop();
+        }
+
         if (fastForwardStopAt != NOT_FAST_FORWARDING) {
             if (tick == fastForwardStopAt) {
                 fastForwardStopAt = NOT_FAST_FORWARDING;
@@ -124,6 +129,9 @@ public class GhoostlingManager : MonoBehaviour {
         
         if (Input.GetKeyDown(KeyCode.G)) {
             EndLoop();
+        }
+        if (Input.GetKeyDown(KeyCode.F)) {  // fast forward till the end
+
         }
 
 
@@ -210,6 +218,9 @@ public class GhoostlingManager : MonoBehaviour {
 
     public bool IsFastForwarding() {
         return fastForwardStopAt != NOT_FAST_FORWARDING;
+    }
+    public bool IsPaused() {
+        return pauseTicksRemaining > 0;
     }
 
     // Debug stuff
