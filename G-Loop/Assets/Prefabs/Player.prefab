@@ -442,6 +442,9 @@ GameObject:
   - component: {fileID: 6349239089116009943}
   - component: {fileID: 6349239089116009928}
   - component: {fileID: 6349239089116009941}
+  - component: {fileID: 6566664386635067415}
+  - component: {fileID: 584874505851014159}
+  - component: {fileID: 2520677861557086567}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -531,6 +534,68 @@ MonoBehaviour:
   mouseSensitivity: 200
   playerBody: {fileID: 1519396448949180748}
   xRotation: 0
+--- !u!328 &6566664386635067415
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349239089116009929}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: afb6f3c1fcb126d3cb2d4b187ecac29e, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 6349239089116009943}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: _MainTex
+  m_RenderMode: 4
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 0
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!114 &584874505851014159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349239089116009929}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ed554b23b541d4ea9201bf78a3e238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shader: {fileID: 4800000, guid: 0a3c04d411f83614ab285ced492c8fcb, type: 3}
+  VHSClip: {fileID: 32900000, guid: afb6f3c1fcb126d3cb2d4b187ecac29e, type: 3}
+--- !u!114 &2520677861557086567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349239089116009929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25726d61223adc32a9a5933a1e892763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 584874505851014159}
 --- !u!1 &6349239089560444316
 GameObject:
   m_ObjectHideFlags: 0
