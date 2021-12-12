@@ -116,5 +116,8 @@ public class Movement : MonoBehaviour {
             // TODO uncrouch 
         }
     }
-
+    
+    public void yeet(float yeet_power){
+        velocity.y = Mathf.Sqrt(yeet_power * 2f * -GRAVITY);
+    }
 }
