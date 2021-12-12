@@ -103,7 +103,12 @@ public class GooseController : MonoBehaviour {
         currentFrame.tick = gman.GetCurrentTick();
 
         // Collect inputs and act upon them
-        var inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
+        GhoostlingData.UserInputs inputs;
+        if (gman.IsFastForwarding() || gman.IsPaused()) {
+            inputs = new GhoostlingData.UserInputs();  // empty set of inputs
+        } else {
+            inputs = new GhoostlingData.UserInputs(GhoostlingData.UserInputs.READ_USER_INPUTS);
+        }
         currentFrame.inputs = inputs;
         Movement.ProcessInputs(inputs);
         MouseLook.ProcessInputs(inputs);

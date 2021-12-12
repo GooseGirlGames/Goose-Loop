@@ -22,7 +22,9 @@ public class GhoostlingManager : MonoBehaviour {
         public bool isFixed;
     }
     private Stack<LoopBreakStackFrame> loopBreaks = new Stack<LoopBreakStackFrame>();
-    private const float FAST_FORWARD_SPEED = 30f;  // TODO make ff fast, duh (kalt)
+    private const float FAST_FORWARD_SPEED_MANUAL = 2.5f;
+    private const float FAST_FORWARD_SPEED_AUTO = 50f;
+    private float fastForwardSpeed = FAST_FORWARD_SPEED_AUTO;
     private const int NOT_FAST_FORWARDING = -1;
 
     private int fastForwardStopAt = NOT_FAST_FORWARDING;
@@ -69,17 +71,17 @@ public class GhoostlingManager : MonoBehaviour {
             return;
         }
 
-        if (tick == maximumTick) {
-            EndLoop();
-        }
-
         if (fastForwardStopAt != NOT_FAST_FORWARDING) {
             if (tick == fastForwardStopAt) {
                 fastForwardStopAt = NOT_FAST_FORWARDING;
                 Time.timeScale = 1;
             } else {
-                Time.timeScale = FAST_FORWARD_SPEED;
+                Time.timeScale = fastForwardSpeed;
             }
+        }
+
+        if (tick == maximumTick) {
+            EndLoop();
         }
 
         if (loopBreaks.Count != 0) {
@@ -118,6 +120,7 @@ public class GhoostlingManager : MonoBehaviour {
                     DisableGeeseAfter(brokenGoose.GetId());
                     brokenGoose.SetState(GooseController.GooseState.GHOOSTLING);  // until FF ends
                     fastForwardStopAt = loopBreak.tick;
+                    fastForwardSpeed = FAST_FORWARD_SPEED_AUTO;
                     ResetTick(doPause: false);
                     return;
                     //activeGoose.SetGooseEnabled(false);  // will need to re-enable when popping
@@ -131,7 +134,8 @@ public class GhoostlingManager : MonoBehaviour {
             EndLoop();
         }
         if (Input.GetKeyDown(KeyCode.F)) {  // fast forward till the end
-
+            fastForwardStopAt = maximumTick;
+            fastForwardSpeed = FAST_FORWARD_SPEED_MANUAL;
         }
 
 
@@ -164,10 +168,6 @@ public class GhoostlingManager : MonoBehaviour {
         pauseTicksRemaining = doPause ? PAUSE_TICKS : 10;
     }
 
-    private void FastForward(int toTick) {
-        fastForwardStopAt = toTick;
-    }
-
     public void EndLoop() {
         if (loopBreaks.Count == 0) {
             SpawnActiveGoose();
@@ -185,6 +185,7 @@ public class GhoostlingManager : MonoBehaviour {
             DisableGeeseAfter(loopBreak.originGooseId);  // re-enable all geese
 
             fastForwardStopAt = loopBreak.tick;
+            fastForwardSpeed = FAST_FORWARD_SPEED_AUTO;
             ResetTick(doPause: false);
         }
     }
