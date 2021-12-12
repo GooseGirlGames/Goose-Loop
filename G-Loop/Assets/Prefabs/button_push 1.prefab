@@ -251,6 +251,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8416664536764484619}
   - component: {fileID: 2462856675670120049}
+  - component: {fileID: 919132147594144489}
+  - component: {fileID: 919132147594144486}
   m_Layer: 0
   m_Name: button_push 1
   m_TagString: Untagged
@@ -267,7 +269,7 @@ Transform:
   m_GameObject: {fileID: 9189084183787067057}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.62188, y: -4.232683, z: -8.726554}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.91951203, y: 14.870675, z: 1.5918926}
   m_Children:
   - {fileID: 611691988757142677}
   - {fileID: 4664701580963256174}
@@ -293,3 +295,30 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &919132147594144489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9189084183787067057}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2655163, y: 0.20469952, z: 0.2597929}
+  m_Center: {x: -0.003197914, y: 0.11322871, z: -0.000024974901}
+--- !u!114 &919132147594144486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9189084183787067057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba39ab4962c581dfa9369305c7e1569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  triggerEvents: []

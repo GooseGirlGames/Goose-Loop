@@ -83,7 +83,6 @@ public class Movement : MonoBehaviour {
     void FixedUpdate() {
         // Inputs are managed by GooseController, which invokes the ProcessInputs method
     }
-
     public void PerformGroundCheck() {
         isGrounded = Physics.CheckSphere(groundCheck.position,
                 GroundCheck.GROUND_CHECK_RADIUS,
