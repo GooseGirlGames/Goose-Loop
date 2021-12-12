@@ -133,12 +133,13 @@ public class GhoostlingManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.G)) {
             EndLoop();
         }
-        if (Input.GetKeyDown(KeyCode.F)) {  // fast forward till the end
-            fastForwardStopAt = maximumTick;
-            fastForwardSpeed = FAST_FORWARD_SPEED_MANUAL;
+        if (Input.GetKey(KeyCode.F)) {  // fast forward till the end
+            Time.timeScale = FAST_FORWARD_SPEED_MANUAL;
         }
-
-
+        else{
+            Time.timeScale = 1;
+        }
+        
         UpdateDebugMenuText();
 
         ++tick;
@@ -218,7 +219,7 @@ public class GhoostlingManager : MonoBehaviour {
     }
 
     public bool IsFastForwarding() {
-        return fastForwardStopAt != NOT_FAST_FORWARDING;
+        return Time.timeScale > 1;
     }
     public bool IsPaused() {
         return pauseTicksRemaining > 0;
