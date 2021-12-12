@@ -14,35 +14,45 @@ public class Shoot : MonoBehaviour
     private GameObject[] bullet_image;
 
 
-    public int bullets;
-    private int bullet_count = 1;
-    private bool reload = false;
+    private int bullets;
+    private int bullet_count;
+    private int reloadingUntilTick;
+    private GhoostlingManager gman;
+    public const int RELOAD_DURATION = 300;  // ticks
+    public const int SHOOT_DELAY = 20;
+    private List<GameObject> bulletsFired = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start(){
-        //bullet_image = new GameObject[3];
-        //bullet_image[0] = bullet1;
-        //bullet_image[1] = bullet2;
-        //bullet_image[2] = bullet3;
+        gman = GhoostlingManager.GetInstance();
+        Goose_Reset();
     }
 
-    IEnumerator Reload(){
-            reload = true;
-            yield return new WaitForSeconds(0.5f);
-            //reload_warning.SetActive(true);
-            yield return new WaitForSeconds(5);
-            //reload_warning.SetActive(false);
-            reload = false;
-            bullet_count = 1; 
-            //for(int i = 0; i < bullet_image.Length; i++){
-            //    bullet_image[i].SetActive(true);
-            //}
-            
+    public void Goose_Reset() {
+        reloadingUntilTick = -1;
+        bullets = 3;
+        bullet_count = 1;
+        foreach (var go in bulletsFired) {
+            GameObject.DestroyImmediate(go);
+        }
     }
 
-    void Update()
-    {
-        if(Input.GetButtonDown("Fire1") && !reload){
+    public void Reload(){
+        BlockFiringFor(RELOAD_DURATION);
+    }
+
+    private void BlockFiringFor(int tick) {
+        reloadingUntilTick = Mathf.Max(gman.GetCurrentTick() + tick, reloadingUntilTick);
+    }
+
+    private bool IsReloading() {
+        return reloadingUntilTick > gman.GetCurrentTick();
+    }
+
+    public void ProcessInputs(GhoostlingData.UserInputs inputs) {
+
+        if(inputs.fireButtonDown && !IsReloading()){
+            BlockFiringFor(SHOOT_DELAY);
             GameObject bullet =
                     Instantiate(bulletPrefab, spawn.transform.position, spawn.transform.rotation)
                     as GameObject;
@@ -50,12 +60,12 @@ public class Shoot : MonoBehaviour
             bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *100);
 
             bullet.SetActive(true);
-            bullet_image[bullet_count-1].SetActive(false);
+            bulletsFired.Add(bullet);
+            //bullet_image[bullet_count-1].SetActive(false);
             bullet_count++; 
             if(bullet_count%(bullets+1) == 0){
-                StartCoroutine(Reload());
+                Reload();
             }
-            Debug.Log(bullet_count);
         }
     }
 }

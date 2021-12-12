@@ -796,6 +796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Movement: {fileID: 4045397612735749029}
   MouseLook: {fileID: 6349239089116009941}
+  Shoot: {fileID: 7672118009470015056}
   viewModel: {fileID: 8315617001832338873}
   playerModelRenderer: {fileID: 1026301619819964211}
   feathers: {fileID: 7360305920103701864}
@@ -849,7 +850,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8666525715951858087, guid: 43346d3ceb07f1be2a483f7e4063a106, type: 3}
   spawn: {fileID: 4520765313290914303}
-  bullets: 3
 --- !u!1001 &506422273719727983
 PrefabInstance:
   m_ObjectHideFlags: 0
