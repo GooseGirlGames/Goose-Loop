@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DebugMenu : MonoBehaviour {
+    public Canvas canvas;
     public Text text;
     private List<string> lines = new List<string>();
     
@@ -15,8 +16,22 @@ public class DebugMenu : MonoBehaviour {
         lines[i] = text;
     }
 
+    public void SetVisible(bool visible) {
+        canvas.enabled = visible;
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.F3)) {
+            SetVisible(!canvas.enabled);
+        }
+    }
+
     private void OnGUI() {
-        string newText = "";
+        if (!canvas.enabled) {
+            return;
+        }
+
+        string newText = "meow, meow, meow i'm debug output\n";
         foreach (var line in lines) {
             newText += line + "\n";
         }
