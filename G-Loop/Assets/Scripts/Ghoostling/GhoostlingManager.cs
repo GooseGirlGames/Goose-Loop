@@ -26,6 +26,7 @@ public class GhoostlingManager : MonoBehaviour {
     private const float FAST_FORWARD_SPEED_AUTO = 50f;
     private float fastForwardSpeed = FAST_FORWARD_SPEED_AUTO;
     private const int NOT_FAST_FORWARDING = -1;
+    private (Vector3, Quaternion) gooseSpawn;
 
     private int fastForwardStopAt = NOT_FAST_FORWARDING;
     public void RegisterGoose(GooseController goose) {
@@ -39,11 +40,14 @@ public class GhoostlingManager : MonoBehaviour {
 
     void Start() {
         InitDebugMenuLines();
-        foreach (var item in physicObjects)
-        {
+        foreach (var item in physicObjects) {
             startPositions.Add(item.transform.position);
             startRotations.Add(item.transform.rotation);
         }
+
+        // Move GhoostlingManager to where goose is
+        gooseSpawn.Item1 = playerPrefab.transform.position;
+        gooseSpawn.Item2 = playerPrefab.transform.rotation;
     }
 
     // Get current scene's GhooslingManager
@@ -223,6 +227,10 @@ public class GhoostlingManager : MonoBehaviour {
     }
     public bool IsPaused() {
         return pauseTicksRemaining > 0;
+    }
+
+    public (Vector3, Quaternion) GetSpawnLocation() {
+        return gooseSpawn;
     }
 
     // Debug stuff

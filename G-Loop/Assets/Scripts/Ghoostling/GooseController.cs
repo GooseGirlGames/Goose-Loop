@@ -224,8 +224,8 @@ public class GooseController : MonoBehaviour {
     }
 
     public void ResetTransformToSpawn() {
-        transform.position = gman.transform.position;
-        transform.eulerAngles = gman.transform.eulerAngles;
+        transform.position = gman.GetSpawnLocation().Item1;
+        transform.rotation = gman.GetSpawnLocation().Item2;
     }
 
     public void SetGooseEnabled(bool gooseEnabled) {  // TODO rename to hide?
