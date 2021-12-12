@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2205484619003797966}
   - component: {fileID: 8134838643559093777}
   - component: {fileID: 6239162020525189665}
-  - component: {fileID: 7488903377456620766}
+  - component: {fileID: 6988459270417139315}
   m_Layer: 0
   m_Name: face5
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2346980229110482978}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.227, y: 0.003490283, z: 4.689504e-10}
+  m_LocalPosition: {x: 0.335, y: 0.003490283, z: 4.689504e-10}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 5790960672376512911}
@@ -99,7 +99,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &7488903377456620766
+--- !u!65 &6988459270417139315
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,8 +110,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.050526917, y: 0.7200002, z: 0.7200002}
-  m_Center: {x: -0.51797616, y: -0.00872569, z: 0}
+  m_Size: {x: 0.020638466, y: 0.7200002, z: 0.7200002}
+  m_Center: {x: -0.53292036, y: -0.008725703, z: 1.2977418e-17}
 --- !u!1 &2875195198576317843
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 7197409014555740682}
   - component: {fileID: 1280846460128109306}
   - component: {fileID: 6758825518625833209}
-  - component: {fileID: 387834777254928664}
+  - component: {fileID: 3991431587537959836}
   m_Layer: 0
   m_Name: face4
   m_TagString: Untagged
@@ -211,7 +211,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &387834777254928664
+--- !u!65 &3991431587537959836
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,8 +222,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.72, y: 0.7200002, z: 0.04325552}
-  m_Center: {x: 0, y: -0.00000002980233, z: 0.53103566}
+  m_Size: {x: 0.72, y: 0.7200002, z: 0.021261925}
+  m_Center: {x: 0, y: -0.000000029802322, z: 0.5420325}
 --- !u!1 &6145874286798264788
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 8446114744412998004}
   - component: {fileID: 479027930537582161}
   - component: {fileID: 9042803197620786611}
-  - component: {fileID: 2302816658935640937}
+  - component: {fileID: 2007307109541405846}
   m_Layer: 0
   m_Name: face3
   m_TagString: Untagged
@@ -252,7 +252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6145874286798264788}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 1.209001e-18, y: 0.0015357176, z: -0.31208703}
+  m_LocalPosition: {x: 1.209001e-18, y: 0.0015357176, z: -0.358}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 5790960672376512911}
@@ -323,7 +323,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &2302816658935640937
+--- !u!65 &2007307109541405846
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -334,8 +334,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.72, y: 0.05295075, z: 0.7200002}
-  m_Center: {x: -0.005817145, y: -0.52549, z: 0}
+  m_Size: {x: 0.67517185, y: 0.022646183, z: 0.715121}
+  m_Center: {x: -0.0057606697, y: -0.54064226, z: -0.002439618}
 --- !u!1 &6563557340039232309
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 3775100748138445637}
   - component: {fileID: 291165534272970623}
   - component: {fileID: 2378587916718102687}
-  - component: {fileID: 3835747586887324563}
+  - component: {fileID: 1571232141985756895}
   m_Layer: 0
   m_Name: face1
   m_TagString: Untagged
@@ -399,7 +399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7253457281511085386}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 1.5501341e-32, y: -6.206185e-17, z: 0.27950174}
+  m_LocalPosition: {x: 1.5501341e-32, y: -6.206185e-17, z: 0.317}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 5790960672376512911}
@@ -470,7 +470,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3835747586887324563
+--- !u!65 &1571232141985756895
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -481,8 +481,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.72, y: 0.04325555, z: 0.7200002}
-  m_Center: {x: -0.01163426, y: 0.5041605, z: 0}
+  m_Size: {x: 0.6587553, y: 0.016368385, z: 0.7200002}
+  m_Center: {x: -0.015614986, y: 0.5176041, z: -2.5017118e-16}
 --- !u!1 &8189017759944535656
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 3810940092202132350}
   - component: {fileID: 8752406841988174854}
   - component: {fileID: 2678631592099113833}
-  - component: {fileID: 2990743780537139158}
+  - component: {fileID: 54199862665469987}
   m_Layer: 0
   m_Name: face6
   m_TagString: Untagged
@@ -511,7 +511,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8189017759944535656}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.23, y: 0, z: 0}
+  m_LocalPosition: {x: -0.368, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 5790960672376512911}
@@ -582,7 +582,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &2990743780537139158
+--- !u!65 &54199862665469987
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -593,5 +593,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0456793, y: 0.7200002, z: 0.7200002}
-  m_Center: {x: 0.50876564, y: -0.0029085584, z: 0}
+  m_Size: {x: 0.02073288, y: 0.7200002, z: 0.7200002}
+  m_Center: {x: 0.51724243, y: -0.0029085577, z: 1.3577521e-17}
