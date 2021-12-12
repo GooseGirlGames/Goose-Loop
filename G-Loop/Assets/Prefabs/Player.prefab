@@ -770,7 +770,7 @@ MonoBehaviour:
   Movement: {fileID: 4045397612735749029}
   MouseLook: {fileID: 6349239089116009941}
   viewModel: {fileID: 8315617001832338873}
-  playerModelRenderer: {fileID: 186112851731574424}
+  playerModelRenderer: {fileID: 0}
   feathers: {fileID: 7360305920103701864}
   BehavioursWhileActive:
   - {fileID: 4045397612735749029}
@@ -1136,14 +1136,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
---- !u!23 &186112851731574424 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5592613647961048715, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
-  m_PrefabInstance: {fileID: 5695295256306657299}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6158256522905438001 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -7314050912544952542, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
+--- !u!1 &4884339672256156994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
   m_PrefabInstance: {fileID: 5695295256306657299}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5225153725841887224 stripped
@@ -1151,9 +1146,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
   m_PrefabInstance: {fileID: 5695295256306657299}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4884339672256156994 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
+--- !u!4 &6158256522905438001 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7314050912544952542, guid: fcb5106c8a065ffde9d593f652b50733, type: 3}
   m_PrefabInstance: {fileID: 5695295256306657299}
   m_PrefabAsset: {fileID: 0}
 --- !u!136 &6979136311025853385
