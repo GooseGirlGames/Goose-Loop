@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
-    public GameObject gun;
+    public GameObject bulletPrefab;
     public GameObject spawn;
-    public GameObject reload_warning;
+    //public GameObject reload_warning;
     
-    public GameObject bullet1;
-    public GameObject bullet2;
-    public GameObject bullet3;
+    //public GameObject bullet1;
+    //public GameObject bullet2;
+    //public GameObject bullet3;
     private GameObject[] bullet_image;
 
 
@@ -20,34 +20,36 @@ public class Shoot : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
-        bullet_image = new GameObject[3];
-        bullet_image[0] = bullet1;
-        bullet_image[1] = bullet2;
-        bullet_image[2] = bullet3;
+        //bullet_image = new GameObject[3];
+        //bullet_image[0] = bullet1;
+        //bullet_image[1] = bullet2;
+        //bullet_image[2] = bullet3;
     }
 
     IEnumerator Reload(){
             reload = true;
             yield return new WaitForSeconds(0.5f);
-            reload_warning.SetActive(true);
+            //reload_warning.SetActive(true);
             yield return new WaitForSeconds(5);
-            reload_warning.SetActive(false);
+            //reload_warning.SetActive(false);
             reload = false;
             bullet_count = 1; 
-            for(int i = 0; i < bullet_image.Length; i++){
-                bullet_image[i].SetActive(true);
-            }
+            //for(int i = 0; i < bullet_image.Length; i++){
+            //    bullet_image[i].SetActive(true);
+            //}
             
     }
 
     void Update()
     {
         if(Input.GetButtonDown("Fire1") && !reload){
-            GameObject bullet = Instantiate(gun, spawn.transform.position, spawn.transform.rotation) as GameObject;
-            bullet.transform.position = spawn.transform.position + spawn.transform.forward*2;
-            bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *1000);
+            GameObject bullet =
+                    Instantiate(bulletPrefab, spawn.transform.position, spawn.transform.rotation)
+                    as GameObject;
+            bullet.transform.position = spawn.transform.position;
+            bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *100);
 
-            gun.SetActive(true);
+            bullet.SetActive(true);
             bullet_image[bullet_count-1].SetActive(false);
             bullet_count++; 
             if(bullet_count%(bullets+1) == 0){
