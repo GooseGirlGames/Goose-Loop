@@ -23,7 +23,7 @@ public class GooseController : MonoBehaviour {
 
     // Sadly, renderers are not behaviours, so they can't be managed by the lists :(
     public GameObject viewModel;
-    public MeshRenderer playerModelRenderer;
+    public SkinnedMeshRenderer playerModelRenderer;
     public ExplodedFeathers feathers;
 
     /** All behaviours that should be active in the state.  Upon state
