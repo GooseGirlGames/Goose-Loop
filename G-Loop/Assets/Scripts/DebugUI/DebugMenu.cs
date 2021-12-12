@@ -20,14 +20,18 @@ public class DebugMenu : MonoBehaviour {
         canvas.enabled = visible;
     }
 
+    public bool IsVisible() {
+        return canvas.enabled;
+    }
+
     private void Update() {
         if (Input.GetKeyDown(KeyCode.F3)) {
-            SetVisible(!canvas.enabled);
+            SetVisible(!IsVisible());
         }
     }
 
     private void OnGUI() {
-        if (!canvas.enabled) {
+        if (!IsVisible()) {
             return;
         }
 

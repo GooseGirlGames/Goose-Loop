@@ -6,9 +6,11 @@ using TMPro;
 public class GooseID : MonoBehaviour {
     public GooseController controller;
     public TMP_Text text;
+    private DebugMenu debug;
     
     void Start() {
         text.text = "G" + controller.GetId();
+        debug = DebugMenu.GetInstance();
     }
 
 
@@ -19,5 +21,13 @@ public class GooseID : MonoBehaviour {
         lookTarget.y = transform.position.y;
         text.gameObject.transform.LookAt(lookTarget);
         text.gameObject.transform.Rotate(Vector3.up, 180.0f);  // flip
+    }
+
+    private void Update() {
+        if (debug) {
+            text.enabled = debug.IsVisible();
+        } else {
+            text.enabled = false;
+        }
     }
 }
