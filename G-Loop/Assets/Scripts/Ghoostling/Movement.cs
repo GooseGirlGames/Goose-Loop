@@ -12,7 +12,7 @@ public class Movement : MonoBehaviour {
     // 0  = instant accelleration (infinetely snappy)
     // 1  = default
     // >1 = slower (not snappy)
-    public const float MOVEMENT_SNAPINESS = 0.3f;
+    public const float MOVEMENT_SNAPINESS = 0.5f;
     public CharacterController controller;
     public Transform groundCheck;
     public LayerMask groundLayer;
@@ -20,8 +20,8 @@ public class Movement : MonoBehaviour {
     private Vector3 velocity;
     private bool isGrounded;
     public Animator anim;
-    public float pushPower = 10f;
-    public float weight = 1f;
+    private float pushPower = 6f;
+    private float weight = 5f;
     private GhoostlingManager gman;
     private GooseController gcon;
     private void Start() {
@@ -41,9 +41,9 @@ public class Movement : MonoBehaviour {
             higher than our id, push that goose out of the way.  Issue #17
         */
 
-        GooseController other_goose= hit.gameObject.GetComponentInChildren<GooseController>();
+        GooseController other_goose = hit.gameObject.GetComponentInChildren<GooseController>();
         Rigidbody body = hit.collider.attachedRigidbody;
-        Vector3 force;
+
 
         if (other_goose!= null){ 
             if(other_goose.GetId() > gcon.GetId()){
@@ -63,13 +63,19 @@ public class Movement : MonoBehaviour {
         if (body == null || body.isKinematic){
             return;
         }
-
-        //Debug.Log(hit.moveDirection);
+        
+        Vector3 pushDirection;
         if (hit.moveDirection.y < -0.3){
-            force = new Vector3(0f, 0.5f, 0f) * Movement.GRAVITY * weight;
+            return;
         } else {
-            force = hit.controller.velocity.magnitude * hit.normal * -1 * pushPower * 100;
+            _gizmo_color = Color.magenta;
+            pushDirection = hit.moveDirection;
+            pushDirection.y = 0;  // don't push down
         }
+
+        Vector3 force = pushPower * pushDirection * weight;
+
+        _debug_ray = (hit.point, force, force.magnitude);
         body.AddForceAtPosition(force, hit.point);
     }
 //------------------------------------------------------------------------------------------------------------------------------
@@ -119,5 +125,18 @@ public class Movement : MonoBehaviour {
     
     public void yeet(float yeet_power){
         velocity.y = Mathf.Sqrt(yeet_power * 2f * -GRAVITY);
+    }
+
+    // DEBUG Stuff
+    (Vector3, Vector3, float) _debug_ray = (Vector3.zero, Vector3.zero, 0);
+    (Vector3, float) _debug_sphere = (Vector3.zero, 0);
+    Color _gizmo_color = Color.gray;
+    private void OnDrawGizmos() {
+        Gizmos.color = _gizmo_color;
+        Gizmos.DrawLine(
+                _debug_ray.Item1,
+                _debug_ray.Item1 + _debug_ray.Item3 * Vector3.Normalize(_debug_ray.Item2)
+        );
+        Gizmos.DrawSphere(_debug_sphere.Item1, _debug_sphere.Item2);
     }
 }
