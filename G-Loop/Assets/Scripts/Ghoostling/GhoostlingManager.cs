@@ -160,7 +160,7 @@ public class GhoostlingManager : MonoBehaviour {
         // TODO UI stuff for delay
         tick = 0;
         foreach(var ghoostling in geese){
-            ghoostling.ResetTransformToSpawn();
+            ghoostling.Goose_Reset();
         }
         int i = 0;
         foreach(var item in physicObjects){
@@ -198,14 +198,14 @@ public class GhoostlingManager : MonoBehaviour {
     public void SpawnActiveGoose() {
 
         GooseController activeGoose = geese[geese.Count - 1];
-        activeGoose.ResetTransformToSpawn();
+        activeGoose.Goose_Reset();
         activeGoose.SetState(GooseController.GooseState.GHOOSTLING);
 
         ResetTick();
 
         GameObject newGoose = GameObject.Instantiate(playerPrefab, transform);
         GooseController controller = newGoose.GetComponent<GooseController>();
-        controller.ResetTransformToSpawn();
+        controller.Goose_Reset();
         controller.SetState(GooseController.GooseState.ACTIVE);
 
         // enable all geese

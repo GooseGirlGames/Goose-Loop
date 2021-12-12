@@ -20,6 +20,7 @@ public class GooseController : MonoBehaviour {
     /** References to commonly accessed behaviours. */
     public Movement Movement;
     public mouse_look MouseLook;
+    public Shoot Shoot;
 
     // Sadly, renderers are not behaviours, so they can't be managed by the lists :(
     public GameObject viewModel;
@@ -112,6 +113,7 @@ public class GooseController : MonoBehaviour {
         currentFrame.inputs = inputs;
         Movement.ProcessInputs(inputs);
         MouseLook.ProcessInputs(inputs);
+        Shoot.ProcessInputs(inputs);
 
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
@@ -145,6 +147,7 @@ public class GooseController : MonoBehaviour {
         var currentFrame = data.GetFrame(tick);
         Movement.ProcessInputs(currentFrame.inputs);
         MouseLook.ProcessInputs(currentFrame.inputs);
+        Shoot.ProcessInputs(currentFrame.inputs);
 
         if(gman.GetCurrentTick() == 0){
             MakeInvulnerable(SPAWN_INVULNERABILITY_TICKS);
@@ -223,7 +226,13 @@ public class GooseController : MonoBehaviour {
         }
     }
 
-    public void ResetTransformToSpawn() {
+    // Called after tick is set to zero
+    public void Goose_Reset() {
+        ResetTransformToSpawn();
+        Shoot.Goose_Reset();
+    }
+
+    private void ResetTransformToSpawn() {
         transform.position = gman.GetSpawnLocation().Item1;
         transform.rotation = gman.GetSpawnLocation().Item2;
     }
