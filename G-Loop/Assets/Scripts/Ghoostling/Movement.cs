@@ -48,7 +48,6 @@ public class Movement : MonoBehaviour {
         if (other_goose!= null){ 
             if(other_goose.GetId() > gcon.GetId()){
                 Debug.Log("I get push: " + gcon.GetId() + "   I push: " + other_goose.GetId());
-                other_goose.Movement.velocity.y = Mathf.Sqrt(120f);
                 gcon.MakeInvulnerable(20);
                 //apply
             }
