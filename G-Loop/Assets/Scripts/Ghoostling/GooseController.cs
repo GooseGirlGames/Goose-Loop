@@ -138,6 +138,9 @@ public class GooseController : MonoBehaviour {
             Debug.Log(
                 "t=" + gman.GetCurrentTick() +
                 "Active goose " + GenerateName() + " Died");
+            data.AddFrame(currentFrame);
+            gman.EndLoop();  // hope this won't break anything
+            return;
         }
 
         // TODO handle item interactions

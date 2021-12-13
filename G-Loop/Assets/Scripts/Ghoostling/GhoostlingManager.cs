@@ -23,7 +23,7 @@ public class GhoostlingManager : MonoBehaviour {
     }
     private Stack<LoopBreakStackFrame> loopBreaks = new Stack<LoopBreakStackFrame>();
     private const float FAST_FORWARD_SPEED_MANUAL = 2.5f;
-    private const float FAST_FORWARD_SPEED_AUTO = 50f;
+    private const float FAST_FORWARD_SPEED_AUTO = 2f;
     private float fastForwardSpeed = FAST_FORWARD_SPEED_AUTO;
     private const int NOT_FAST_FORWARDING = -1;
     private (Vector3, Quaternion) gooseSpawn;
@@ -75,12 +75,16 @@ public class GhoostlingManager : MonoBehaviour {
             return;
         }
 
+        Time.timeScale = Input.GetKey(KeyCode.F) ? FAST_FORWARD_SPEED_MANUAL : 1;
+
         if (fastForwardStopAt != NOT_FAST_FORWARDING) {
             if (tick == fastForwardStopAt) {
                 fastForwardStopAt = NOT_FAST_FORWARDING;
                 Time.timeScale = 1;
             } else {
-                Time.timeScale = fastForwardSpeed;
+                if (Time.timeScale != fastForwardSpeed) {
+                    Time.timeScale = fastForwardSpeed;
+                }
             }
         }
 
@@ -138,13 +142,19 @@ public class GhoostlingManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.G)) {
             EndLoop();
         }
-        if (Input.GetKey(KeyCode.F)) {  // fast forward till the end
-            Time.timeScale = FAST_FORWARD_SPEED_MANUAL;
+
+        /*
+        // only allow manual fast forward if auto ff not active
+        if (Mathf.Abs(Time.timeScale - FAST_FORWARD_SPEED_AUTO) > 0.01) {
+            if (Input.GetKey(KeyCode.F)) {  // fast forward till the end
+                Time.timeScale = FAST_FORWARD_SPEED_MANUAL;
+            } else {
+                Time.timeScale = 1;
+            }
+
         }
-        else{
-            Time.timeScale = 1;
-        }
-        
+        */
+
         UpdateDebugMenuText();
 
         ++tick;

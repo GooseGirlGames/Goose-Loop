@@ -21,7 +21,6 @@ public class pulley_down : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log("Goose on board:" + gooseCount);
         pully_animator.SetInteger("passangers", gooseCount);
     }
 }
