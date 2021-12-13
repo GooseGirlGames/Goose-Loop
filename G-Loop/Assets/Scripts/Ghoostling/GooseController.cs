@@ -45,6 +45,9 @@ public class GooseController : MonoBehaviour {
     public static int SPAWN_INVULNERABILITY_TICKS = 100;
     private int invulnerable = 0; 
     private bool? loopBeakFixable = null;
+    public LayerMask bulletLayer;
+    public const float bulletCheckRadius = 0.27f;
+    public const float bulletCheckHeightThingy = 0.16f;
 
     void Awake(){
         id = GooseController.count++;
@@ -92,6 +95,14 @@ public class GooseController : MonoBehaviour {
         }
     }
 
+    private bool GettingHitByBullet() {
+        return Physics.CheckCapsule(
+            start: Movement.groundCheck.position + Vector3.up * bulletCheckHeightThingy,
+            end: MouseLook.transform.position - Vector3.up * bulletCheckHeightThingy,
+            radius: bulletCheckRadius,
+            layerMask: bulletLayer);
+    }
+
     private void OnGUI() {
         UpdateDebugMenuText();
     }
@@ -118,6 +129,16 @@ public class GooseController : MonoBehaviour {
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
         currentFrame.eulerAngles = transform.rotation.eulerAngles;
+
+        if (GettingHitByBullet()) {
+            var death = new GhoostlingData.Death();
+            death.cause = GhoostlingData.Death.Cause.EXTERNAL;
+            currentFrame.death = death;
+            Die();
+            Debug.Log(
+                "t=" + gman.GetCurrentTick() +
+                "Active goose " + GenerateName() + " Died");
+        }
 
         // TODO handle item interactions
         currentFrame.itemInteraction = null;
@@ -147,6 +168,13 @@ public class GooseController : MonoBehaviour {
         MouseLook.ProcessInputs(currentFrame.inputs);
         Shoot.ProcessInputs(currentFrame.inputs);
 
+        if (currentFrame.nonBreakZone.HasValue) {
+            if (currentFrame.nonBreakZone.Value.ignoreAxisY) {
+                currentFrame.position.y = transform.position.y;
+                data.AddFrame(currentFrame);  // update
+            }
+        }
+
         if(gman.GetCurrentTick() == 0){
             MakeInvulnerable(SPAWN_INVULNERABILITY_TICKS);
         }
@@ -157,7 +185,27 @@ public class GooseController : MonoBehaviour {
             invulnerable--;
         }
 
-        // check for broken movement is done in CheckForLoopBreak
+        bool externalDeathRecorded = false;
+        if (currentFrame.death is GhoostlingData.Death d) {
+            if (d.cause == GhoostlingData.Death.Cause.EXTERNAL) {
+                externalDeathRecorded = true;
+            } else {
+                Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+            }
+        }
+        bool hitByBullet = GettingHitByBullet();
+        if (externalDeathRecorded && hitByBullet) {
+            Die();  // All good
+        } else if (externalDeathRecorded && !hitByBullet) {
+            Debug.Log("Expecting loop break, goose was un-killed");
+        } else if (!externalDeathRecorded && hitByBullet) {
+            gman.DebugLog("Ghoostling killed.  updating data");
+            var death = new GhoostlingData.Death();
+            death.cause = GhoostlingData.Death.Cause.EXTERNAL;
+            currentFrame.death = death;
+            data.AddFrame(currentFrame);  // will update to include death
+            Die();
+        }
 
         // TODO handle item interactions
         // TODO handle non-break zones
@@ -190,15 +238,43 @@ public class GooseController : MonoBehaviour {
 
         _error = error;  // this member variable is only used for debug output
 
-        bool broken = error > 0.5f;
+        bool positionBroken = error > 0.5f;
 
-        if (broken) {
+        if (positionBroken) {
             loopBeakFixable = false;
             Debug.Log(GenerateName() + " broke due to position mismatch.");
+            return true;
         } else {
             loopBeakFixable = null;
         }
-        return broken;
+        
+        bool externalDeathRecorded = false;
+        if (frame.death is GhoostlingData.Death d) {
+            if (d.cause == GhoostlingData.Death.Cause.EXTERNAL) {
+                Debug.Log(
+                    "(t=" + gman.GetCurrentTick() + "): " +
+                    " Death of " + GenerateName() + " recorded."
+                );
+                externalDeathRecorded = true;
+            }
+        }
+        bool hitByBullet = GettingHitByBullet();
+        if (!externalDeathRecorded && hitByBullet) {
+            // Killed
+            Debug.Log(
+                "(t=" + gman.GetCurrentTick() + "): " +
+                GenerateName() + " was killed, which broke the loop.");
+            loopBeakFixable = false;
+            return true;
+        } else if (externalDeathRecorded && !hitByBullet) {
+            // Saved
+            Debug.Log(
+                "(t=" + gman.GetCurrentTick() + "): " +
+                GenerateName() + " was un-killed.  Unless lack of data this is ok");
+            loopBeakFixable = null;
+            return false;
+        }
+        return false;
     }
 
     public void ForceTransformToRecorded() {
@@ -213,6 +289,7 @@ public class GooseController : MonoBehaviour {
             if (fixable) {
                 return true;
             } else {
+                Debug.Log("Exploding due to unfixable loop break.");
                 feathers.Explode();
                 SetGooseEnabled(false);
                 return false;
@@ -221,6 +298,11 @@ public class GooseController : MonoBehaviour {
             Debug.LogWarning("LoopIsFixable called even though loop it not broken.");
             return false;
         }
+    }
+
+    public void Die() {
+        feathers.Explode();
+        SetGooseEnabled(false);
     }
 
     // Called after tick is set to zero
@@ -311,8 +393,20 @@ public class GooseController : MonoBehaviour {
     }
     private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(_actual_pos, 1f);
+        Gizmos.DrawSphere(_actual_pos, 0.3f);
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(_recorded_pos, 1f);
+        Gizmos.DrawSphere(_recorded_pos, 0.3f);
+        
+        /*
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(
+            Movement.groundCheck.position + Vector3.up * bulletCheckHeightThingy,
+            bulletCheckRadius
+        );
+        Gizmos.DrawSphere(
+            MouseLook.transform.position - Vector3.up * bulletCheckHeightThingy,
+            bulletCheckRadius
+        );
+        */
     }
 }

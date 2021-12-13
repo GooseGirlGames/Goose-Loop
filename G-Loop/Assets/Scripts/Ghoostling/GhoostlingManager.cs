@@ -100,6 +100,7 @@ public class GhoostlingManager : MonoBehaviour {
                 }
                 var newActiveGoose = GetGoose(newActiveGooseId);
                 newActiveGoose.SetState(GooseController.GooseState.ACTIVE);
+                DisableGeeseAfter(newActiveGoose.GetId());
             }
         }
 
@@ -260,5 +261,9 @@ public class GhoostlingManager : MonoBehaviour {
                     + (f.isFixed ? "fixed" : "unfixed");
         }
         debug.UpdateLine(_debug_line_break_stack, stackText);
+    }
+
+    public void DebugLog(string text) {
+        Debug.Log("(t=" + tick + ") " + text);
     }
 }

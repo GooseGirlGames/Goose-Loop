@@ -52,7 +52,6 @@ public class Movement : MonoBehaviour {
                 //apply
             }
             else{
-                Debug.Log("I am a stone: " + other_goose.GetId());
             }
             /* if(gcon.GetState() == GooseController.GooseState.ACTIVE)
                 Debug.Log("Collided Goose: " + other_goose.GetId()); */

@@ -59,6 +59,7 @@ public class GhoostlingData {
         public Vector3 eulerAngles;
         public ItemInteraction? itemInteraction;
         public NonBreakZone? nonBreakZone;
+        public Death? death;
     }
     private List<Frame> frames = new List<Frame>();
 

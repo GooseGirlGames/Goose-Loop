@@ -57,7 +57,7 @@ public class Shoot : MonoBehaviour
                     Instantiate(bulletPrefab, spawn.transform.position, spawn.transform.rotation)
                     as GameObject;
             bullet.transform.position = spawn.transform.position;
-            bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *100);
+            bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *1000);
 
             bullet.SetActive(true);
             bulletsFired.Add(bullet);
