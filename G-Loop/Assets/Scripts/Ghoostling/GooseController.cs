@@ -118,9 +118,7 @@ public class GooseController : MonoBehaviour {
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
         currentFrame.eulerAngles = transform.rotation.eulerAngles;
-        
-        // TODO handle shots
-        currentFrame.shotFired = null;
+
         // TODO handle item interactions
         currentFrame.itemInteraction = null;
         // TODO handle non-break zones
@@ -161,7 +159,6 @@ public class GooseController : MonoBehaviour {
 
         // check for broken movement is done in CheckForLoopBreak
 
-        // TODO handle shots
         // TODO handle item interactions
         // TODO handle non-break zones
 

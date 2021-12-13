@@ -37,11 +37,6 @@ public class GhoostlingData {
             fireButtonUp = Input.GetButtonUp("Fire1");
         }
     }
-    public struct ShotFired {
-        public Vector3 origin;
-        public Vector3 direction_normalized;
-        public float speed;
-    }
     public struct ItemInteraction {
         // TODO:
         //public Item pickUp;
@@ -62,7 +57,6 @@ public class GhoostlingData {
         public UserInputs inputs;
         public Vector3 position;
         public Vector3 eulerAngles;
-        public ShotFired? shotFired;
         public ItemInteraction? itemInteraction;
         public NonBreakZone? nonBreakZone;
     }
