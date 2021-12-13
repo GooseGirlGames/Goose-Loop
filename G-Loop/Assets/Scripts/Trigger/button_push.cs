@@ -24,8 +24,7 @@ public class button_push : MonoBehaviour
         active = false;
     }
 
-    // Update is called once per frame
-    void Update(){
+    void FixedUpdate(){
         button_animator.SetBool("pressed", active);
         if(active){
             foreach (var item in triggerEvents)

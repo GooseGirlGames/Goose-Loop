@@ -6,17 +6,33 @@ public class movable_box : MonoBehaviour
 {
     public LayerMask FloatLayer;
     private GameObject body;
-    private bool allowed_to_move = true;
-    // Start is called before the first frame update
+    private List<CharacterController> onPlatform = new List<CharacterController>();
 
     private void Start() {
         body = gameObject;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        var cc = other.GetComponentInChildren<CharacterController>();
+        if (cc) {
+            onPlatform.Add(cc);
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        var cc = other.GetComponentInChildren<CharacterController>();
+        if (cc) {
+            onPlatform.Remove(cc);
+        }
     }
 
     public void TryMove(Vector3 move) {
         bool okay = Physics.CheckSphere(body.transform.position + 3 * move, 0.1f, FloatLayer);
         if (okay) {
             body.transform.Translate(move);
+            foreach (var cc in onPlatform) {
+                cc.Move(move);
+            }
         }
     }
 
