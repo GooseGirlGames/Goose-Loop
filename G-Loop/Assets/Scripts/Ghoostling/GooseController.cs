@@ -21,6 +21,7 @@ public class GooseController : MonoBehaviour {
     public Movement Movement;
     public mouse_look MouseLook;
     public Shoot Shoot;
+    public Interact Interact;
 
     // Sadly, renderers are not behaviours, so they can't be managed by the lists :(
     public GameObject viewModel;
@@ -125,6 +126,7 @@ public class GooseController : MonoBehaviour {
         Movement.ProcessInputs(inputs);
         MouseLook.ProcessInputs(inputs);
         Shoot.ProcessInputs(inputs);
+        Interact.ProcessInputs(inputs);
 
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
@@ -170,6 +172,7 @@ public class GooseController : MonoBehaviour {
         Movement.ProcessInputs(currentFrame.inputs);
         MouseLook.ProcessInputs(currentFrame.inputs);
         Shoot.ProcessInputs(currentFrame.inputs);
+        Interact.ProcessInputs(currentFrame.inputs);
 
         if (currentFrame.nonBreakZone.HasValue) {
             if (currentFrame.nonBreakZone.Value.ignoreAxisY) {

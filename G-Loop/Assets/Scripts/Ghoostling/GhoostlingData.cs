@@ -20,6 +20,8 @@ public class GhoostlingData {
         //public bool honkButtonUp;
         public bool fireButtonDown;
         public bool fireButtonUp;
+        public bool interactButtonDown;
+        public bool interactButtonUp;
         public static int READ_USER_INPUTS = -1;
         public UserInputs(int meow) {  // Need a signature different from UserInputs()
                                        // Would recommend passing READ_USER_INPUTS for clarity :)
@@ -35,6 +37,8 @@ public class GhoostlingData {
             //honkButtonUp = Input.GetButtonUp("Honk");
             fireButtonDown = Input.GetButtonDown("Fire1");
             fireButtonUp = Input.GetButtonUp("Fire1");
+            interactButtonDown = Input.GetButtonDown("Interact");
+            interactButtonUp = Input.GetButtonUp("Interact");
         }
     }
     public struct ItemInteraction {
