@@ -13,51 +13,23 @@ public class movable_box : MonoBehaviour
         body = gameObject;
     }
 
-    private void zoneCheck(){
-        if(Physics.CheckSphere(body.transform.position, 0.1f , FloatLayer)){
-            allowed_to_move = true;
-        }
-        else{
-            allowed_to_move = false;
+    public void TryMove(Vector3 move) {
+        bool okay = Physics.CheckSphere(body.transform.position + 3 * move, 0.1f, FloatLayer);
+        if (okay) {
+            body.transform.Translate(move);
         }
     }
-    private void Update() {
-        zoneCheck();
-    }
+
     public void move_x(){
-        Debug.Log("in zone: " + allowed_to_move);
-        if(allowed_to_move){
-            body.transform.Translate(0.1f, 0f, 0f);
-        }
-        else{
-        body.transform.Translate(-0.1f, 0f, 0f);
-        }
+        TryMove(new Vector3(-0.1f, 0f, 0f));
     }
     public void move_x_back(){
-        Debug.Log("in zone: " + allowed_to_move);
-        if(allowed_to_move){
-            body.transform.Translate(-0.1f, 0f, 0f);
-        }
-        else{
-        body.transform.Translate(0.1f, 0f, 0f);
-        }
+        TryMove(new Vector3(0.1f, 0f, 0f));
     }
     public void move_z(){
-        Debug.Log("in zone: " + allowed_to_move);
-        if(allowed_to_move){
-            body.transform.Translate(0f, 0f, 0.1f);
-        }
-        else{
-        body.transform.Translate(0f, 0f, -0.1f);
-        }
+        TryMove(new Vector3(0f, 0f, 0.1f));
     }
     public void move_z_back(){
-        Debug.Log("in zone: " + allowed_to_move);
-        if(allowed_to_move){
-            body.transform.Translate(0f, 0f, -0.1f);
-        }
-        else{
-        body.transform.Translate(0f, 0f, 0.1f);
-        }
+        TryMove(new Vector3(0f, 0f, -0.1f));
     }
 }
