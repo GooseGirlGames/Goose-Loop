@@ -18,6 +18,7 @@ public class Shoot : MonoBehaviour
     private int bullet_count;
     private int reloadingUntilTick;
     private GhoostlingManager gman;
+    private GooseController gcon;
     public const int RELOAD_DURATION = 300;  // ticks
     public const int SHOOT_DELAY = 20;
     private List<GameObject> bulletsFired = new List<GameObject>();
@@ -25,6 +26,7 @@ public class Shoot : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         gman = GhoostlingManager.GetInstance();
+        gcon = GetComponent<GooseController>();
         Goose_Reset();
     }
 
@@ -58,6 +60,7 @@ public class Shoot : MonoBehaviour
                     as GameObject;
             bullet.transform.position = spawn.transform.position;
             bullet.GetComponent<Rigidbody>().AddForce(spawn.transform.forward *1000);
+            bullet.GetComponent<Bullet>().shooter = gcon.GetId();
 
             bullet.SetActive(true);
             bulletsFired.Add(bullet);

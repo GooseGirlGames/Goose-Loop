@@ -52,6 +52,7 @@ public class GhoostlingData {
             SUICIDE,
         };
         public Cause cause;
+        public int killer;
     }
     public struct NonBreakZone {
         public bool ignoreAxisY;

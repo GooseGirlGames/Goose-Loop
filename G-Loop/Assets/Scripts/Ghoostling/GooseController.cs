@@ -96,12 +96,25 @@ public class GooseController : MonoBehaviour {
         }
     }
 
-    private bool GettingHitByBullet() {
-        return Physics.CheckCapsule(
-            start: Movement.groundCheck.position + Vector3.up * bulletCheckHeightThingy,
-            end: MouseLook.transform.position - Vector3.up * bulletCheckHeightThingy,
+    // Return id of killer goose, -1 if not hit occurs
+    private int GettingHitByBullet() {
+        var bullet = Physics.OverlapCapsule(
+            point0: Movement.groundCheck.position + Vector3.up * bulletCheckHeightThingy,
+            point1: MouseLook.transform.position - Vector3.up * bulletCheckHeightThingy,
             radius: bulletCheckRadius,
             layerMask: bulletLayer);
+        if (bullet.Length == 0) {
+            return -1;
+        } else {
+            foreach (var b in bullet) {
+                var bu = b.gameObject.GetComponent<Bullet>();
+                if (bu) {
+                    return bu.shooter;
+                }
+            }
+            Debug.LogWarning("Couldn't find Bullet.  Is it missing the `Bullet` script?");
+            return -1;
+        }
     }
 
     private void OnGUI() {
@@ -126,20 +139,22 @@ public class GooseController : MonoBehaviour {
         Movement.ProcessInputs(inputs);
         MouseLook.ProcessInputs(inputs);
         Shoot.ProcessInputs(inputs);
-        Interact.ProcessInputs(inputs);
+        // TODO uncomment Interact.ProcessInputs(inputs);
 
         // Store positions, rotations etc.
         currentFrame.position = transform.position;
         currentFrame.eulerAngles = transform.rotation.eulerAngles;
 
-        if (GettingHitByBullet()) {
+        int killer = GettingHitByBullet();
+        if (killer != -1 && killer != GetId()) {
             var death = new GhoostlingData.Death();
             death.cause = GhoostlingData.Death.Cause.EXTERNAL;
+            death.killer = killer;
             currentFrame.death = death;
             Die();
             Debug.Log(
                 "t=" + gman.GetCurrentTick() +
-                "Active goose " + GenerateName() + " Died");
+                "Active goose " + GenerateName() + " Died (killed by " + killer + ")");
             data.AddFrame(currentFrame);
             gman.EndLoop();  // hope this won't break anything
             return;
@@ -172,7 +187,7 @@ public class GooseController : MonoBehaviour {
         Movement.ProcessInputs(currentFrame.inputs);
         MouseLook.ProcessInputs(currentFrame.inputs);
         Shoot.ProcessInputs(currentFrame.inputs);
-        Interact.ProcessInputs(currentFrame.inputs);
+        // TODO uncomment Interact.ProcessInputs(currentFrame.inputs);
 
         if (currentFrame.nonBreakZone.HasValue) {
             if (currentFrame.nonBreakZone.Value.ignoreAxisY) {
@@ -199,7 +214,7 @@ public class GooseController : MonoBehaviour {
                 Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
             }
         }
-        bool hitByBullet = GettingHitByBullet();
+        bool hitByBullet = GettingHitByBullet() != -1;
         if (externalDeathRecorded && hitByBullet) {
             Die();  // All good
         } else if (externalDeathRecorded && !hitByBullet) {
@@ -264,7 +279,7 @@ public class GooseController : MonoBehaviour {
                 externalDeathRecorded = true;
             }
         }
-        bool hitByBullet = GettingHitByBullet();
+        bool hitByBullet = GettingHitByBullet() != -1;
         if (!externalDeathRecorded && hitByBullet) {
             // Killed
             Debug.Log(
