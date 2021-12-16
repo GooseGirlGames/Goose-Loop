@@ -207,9 +207,11 @@ public class GooseController : MonoBehaviour {
         }
 
         bool externalDeathRecorded = false;
+        int killer = -1;
         if (currentFrame.death is GhoostlingData.Death d) {
             if (d.cause == GhoostlingData.Death.Cause.EXTERNAL) {
                 externalDeathRecorded = true;
+                killer = d.killer;
             } else {
                 Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
             }
@@ -218,6 +220,14 @@ public class GooseController : MonoBehaviour {
         if (externalDeathRecorded && hitByBullet) {
             Die();  // All good
         } else if (externalDeathRecorded && !hitByBullet) {
+            if (gman.IsAutoFastForwarding() /* && gman.GetActiveGoose().GetId() < killer */) {
+                gman.DebugLog("Ghoostling killed.  updating data");
+                var death = new GhoostlingData.Death();
+                death.cause = GhoostlingData.Death.Cause.EXTERNAL;
+                currentFrame.death = death;
+                data.AddFrame(currentFrame);  // will update to include death
+                Die();
+            }
             Debug.Log("Expecting loop break, goose was un-killed");
         } else if (!externalDeathRecorded && hitByBullet) {
             gman.DebugLog("Ghoostling killed.  updating data");

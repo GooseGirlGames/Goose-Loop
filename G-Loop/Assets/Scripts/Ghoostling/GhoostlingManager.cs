@@ -236,6 +236,9 @@ public class GhoostlingManager : MonoBehaviour {
     public bool IsFastForwarding() {
         return Time.timeScale > 1;
     }
+    public bool IsAutoFastForwarding() {
+        return Mathf.Abs(Time.timeScale - FAST_FORWARD_SPEED_AUTO) < 0.01f;
+    }
     public bool IsPaused() {
         return pauseTicksRemaining > 0;
     }
