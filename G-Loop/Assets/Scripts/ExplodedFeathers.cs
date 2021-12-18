@@ -19,5 +19,6 @@ public class ExplodedFeathers : MonoBehaviour {
         }
         audioSource.PlayOneShot(explode);
         particleSystem.Emit(FEATHER_COUNT);
+        Debug.Log("Feathers.");
     }
 }

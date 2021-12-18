@@ -207,16 +207,17 @@ public class GooseController : MonoBehaviour {
         }
 
         bool externalDeathRecorded = false;
-        int killer = -1;
+        int killer_recorded = -1;
         if (currentFrame.death is GhoostlingData.Death d) {
             if (d.cause == GhoostlingData.Death.Cause.EXTERNAL) {
-                externalDeathRecorded = true;
-                killer = d.killer;
+                killer_recorded = d.killer;
+                externalDeathRecorded = killer_recorded != GetId();
             } else {
                 Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
             }
         }
-        bool hitByBullet = GettingHitByBullet() != -1;
+        int killer_actual = GettingHitByBullet();
+        bool hitByBullet = killer_actual != -1 && killer_actual != GetId();
         if (externalDeathRecorded && hitByBullet) {
             Die();  // All good
         } else if (externalDeathRecorded && !hitByBullet) {
@@ -289,7 +290,8 @@ public class GooseController : MonoBehaviour {
                 externalDeathRecorded = true;
             }
         }
-        bool hitByBullet = GettingHitByBullet() != -1;
+        int killer = GettingHitByBullet();
+        bool hitByBullet = killer != -1 && killer != GetId();
         if (!externalDeathRecorded && hitByBullet) {
             // Killed
             Debug.Log(
@@ -321,8 +323,7 @@ public class GooseController : MonoBehaviour {
                 return true;
             } else {
                 Debug.Log("Exploding due to unfixable loop break.");
-                feathers.Explode();
-                SetGooseEnabled(false);
+                Die();
                 return false;
             }
         } else {
@@ -334,6 +335,7 @@ public class GooseController : MonoBehaviour {
     public void Die() {
         feathers.Explode();
         SetGooseEnabled(false);
+        Debug.Log(GenerateName() + " died.");
     }
 
     // Called after tick is set to zero
